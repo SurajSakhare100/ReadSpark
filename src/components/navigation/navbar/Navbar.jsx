@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import devLogo from '/logo.png'
+import { File } from 'lucide-react'
 function Navbar() {
     return (
         <div className=''>
@@ -8,7 +9,7 @@ function Navbar() {
                 <nav className="relative max-w-[66rem] w-full md:flex md:items-center md:justify-between md:gap-3 ps-5 pe-2 mx-2 lg:mx-auto py-2 ">
                     <div className="flex items-center justify-between gap-10 ">
                         <Link to="/" className="flex items-center flex-grow font-semibold text-xl text-black  focus:opacity-80" aria-label="Dev Tool">
-                            <img src={devLogo} alt="Dev Tool Logo" className="w-6 h-6 mr-2" />
+                            <img src={devLogo} alt="Dev Tool Logo" className="w-8 h-8 mr-1" />
                             <p className=" whitespace-normal flex-shrink-0">ReadSpark</p>
                         </Link>
                         <div className="md:hidden">
@@ -29,8 +30,8 @@ function Navbar() {
 
                               
                                 <Link to='/readme-generator' className={`p-2 flex items-center text-sm ${location.pathname === '/readme-generator' ? 'text-blue-600' : 'text-gray-800'} hover:text-gray-500`} aria-current={location.pathname === '/readme-generator' ? 'page' : undefined}>
-                                    <svg className="shrink-0 size-4 me-3 md:me-2 block md:hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
-                                    Readme Generator
+                                   <File className='shrink-0 size-4 me-3 md:me-2 block md:hidden'/>
+                                   Readme Generator
                                 </Link>
 
                                 <div className="relative flex flex-wrap items-center gap-x-1.5 md:ps-2.5  md:ms-1.5 before:block before:absolute before:top-1/2 before:-start-px before:w-px before:h-4 before:bg-gray-300 before:-translate-y-1/2 dark:before:bg-neutral-700">
