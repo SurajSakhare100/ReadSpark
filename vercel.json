@@ -1,8 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/templates/(.*)",
-      "destination": "/index.html"
+      "source": "/templates/:path*",        
+      "destination": "/public/templates/:path*" 
+    },
+    {
+      "source": "/:path*",                  
+      "destination": "/src/index.html"
     }
   ]
 }
