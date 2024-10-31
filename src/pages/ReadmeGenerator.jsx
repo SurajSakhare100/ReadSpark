@@ -126,13 +126,13 @@ Host: example.com
 
   return (
     <div className="w-full px-4 md:px-0 ">
-      <div className="md:w-[66rem] mx-auto mt-24 mb-4">
+      <div className="md:w-[66rem] mx-auto mt-28 mb-4">
         <h1 className="tagline text-5xl text-center font-semibold">
           Start Editing Your <span className='text-[#10B981]'>README.md</span> Now
         </h1>
-        <div className='w-full py-4'>
-          <h2 className='text-xl font-semibold mb-2'>Templates For You : </h2>
-          <div className='flex gap-2 flex-wrap justify-center'>
+        <div className='w-full '>
+          <h2 className='text-xl font-semibold mb-4'>Templates For You : </h2>
+          <div className='flex gap-2 flex-wrap justify-center mb-4'>
             {badgesData?.map(badge => (
               <Badge
                 key={badge.id}
