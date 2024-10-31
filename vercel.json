@@ -2,9 +2,6 @@
   "headers": [
     {
       "source": "/templates/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache" }
-      ],
       "destination": "/index.html"
     }
   ]
