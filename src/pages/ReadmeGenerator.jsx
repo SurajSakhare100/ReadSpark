@@ -70,7 +70,7 @@ I am a bachelor's student at {} . I am a {} from India with a proven ability to 
   }
   const handleBadgeClick = async (filename) => {
     try {
-      const response = await fetch(`public/templates/${filename}`); // Fetch the markdown file
+      const response = await fetch(`public/${filename}`); // Fetch the markdown file
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

@@ -28,17 +28,5 @@
     "name": "GitHub Profile Readme",
     "className": "bg-gray-300 text-gray-800",
     "filename": "profile.md"
-  },
-  {
-    "id": 6,
-    "name": "MIT License",
-    "className": "bg-blue-300 text-blue-800",
-    "filename": "license.md"
-  },
-  {
-    "id": 7,
-    "name": "Version 1.0.0",
-    "className": "bg-yellow-300 text-yellow-800",
-    "filename": "version.md"
   }
 ]
