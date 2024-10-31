@@ -70,7 +70,7 @@ I am a bachelor's student at {} . I am a {} from India with a proven ability to 
   }
   const handleBadgeClick = async (filename) => {
     try {
-      const response = await fetch(`public/${filename}`); // Fetch the markdown file
+      const response = await fetch(`public/templates/${filename}`); // Fetch the markdown file
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -83,9 +83,10 @@ I am a bachelor's student at {} . I am a {} from India with a proven ability to 
   return (
     <div className="w-full px-4 md:px-0 ">
       <div className="md:w-[66rem] mx-auto mt-20 mb-4">
-        <h1 className="tagline text-5xl text-center font-semibold">Create Your <span className='text-[#10B981]'>README</span>  me Now</h1>
+        <h1 className="tagline text-5xl text-center font-semibold">
+        Start Editing Your <span className='text-[#10B981]'>README.md</span> Now</h1>
         <div className='w-full py-4'>
-        <h2 className='text-xl font-semibold mb-2'>Templates For You :) </h2>
+        <h2 className='text-xl font-semibold mb-2'>Templates For You : </h2>
         <div className='flex gap-2 flex-wrap justify-center'>
         {badgesData?.map(badge => (
           <Badge
