@@ -6,9 +6,49 @@ import Prism from 'prismjs';
 import 'prismjs/components/prism-jsx';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-http';
-import { Clipboard, Trash } from 'lucide-react';
+import { Clipboard, Trash, Download } from 'lucide-react';
 import Badge from '../components/badge/Badge';
-import badgesData from '../data.json';
+// import {badgesData} from '../data.json';
+
+
+const badgesData = [
+  {
+    "id": 1,
+    "name": "React README",
+    "className": "bg-green-300 text-green-800",
+    "filename": "react.md",
+    "readmeText": "# React Project\n\nThis is a React project README template. It covers all the basics of setting up, running, and deploying a React application.\n\n## Installation\n\n```bash\nnpm install\n```\n\n## Usage\n\n```bash\nnpm start\n```\n\n## Features\n- Component-based architecture\n- Hooks for managing state and side effects\n- Support for custom themes\n\nHappy coding!"
+  },
+  {
+    "id": 2,
+    "name": "Next.js README",
+    "className": "bg-blue-300 text-blue-800",
+    "filename": "next.md",
+    "readmeText": "# Next.js Project\n\nThis template is designed for a Next.js project, providing details on setup and usage.\n\n## Getting Started\n\nFirst, install the dependencies:\n\n```bash\nnpm install\n```\n\nThen run the development server:\n\n```bash\nnpm run dev\n```\n\n## Key Features\n- Server-side rendering (SSR)\n- Static site generation (SSG)\n- API routes for backend functionality\n\nDeploy easily to Vercel!"
+  },
+  {
+    "id": 3,
+    "name": "Flask README",
+    "className": "bg-orange-300 text-orange-800",
+    "filename": "flask.md",
+    "readmeText": "# Flask Application\n\nThis README template provides a basic overview of a Flask project.\n\n## Setup\n\n1. Install dependencies:\n\n```bash\npip install -r requirements.txt\n```\n\n2. Run the application:\n\n```bash\nflask run\n```\n\n## Features\n- RESTful API support\n- Lightweight and fast\n- Jinja2 templating for dynamic HTML\n\nUse this template to start building Python-powered web apps!"
+  },
+  {
+    "id": 4,
+    "name": "Vue README",
+    "className": "bg-violet-300 text-violet-800",
+    "filename": "vue.md",
+    "readmeText": "# Vue Project\n\nA README template tailored for Vue projects. It includes setup, usage, and features.\n\n## Installation\n\n```bash\nnpm install\n```\n\n## Running the App\n\n```bash\nnpm run serve\n```\n\n## Features\n- Reactive data binding\n- Vue Router for single-page navigation\n- Vuex for state management\n\nPerfect for building dynamic, front-end applications!"
+  },
+  {
+    "id": 5,
+    "name": "GitHub Profile Readme",
+    "className": "bg-yellow-300 text-gray-800",
+    "filename": "profile.md",
+    "readmeText": "# Hello, I'm [Your Name]! 👋\n\nWelcome to my GitHub profile! Here's a little about me.\n\n- 🔭 I’m currently working on exciting projects\n- 🌱 I’m learning new frameworks and technologies\n- 📫 How to reach me: [your.email@example.com]\n\n## Skills\n- Languages: JavaScript, Python, HTML, CSS\n- Frameworks: React, Vue, Flask\n\nThanks for stopping by!"
+  }
+]
+
 
 const ReadmeGenerator = () => {
   const [markdownText, setMarkdownText] = useState(`
@@ -60,20 +100,33 @@ Host: example.com
 
   const handleBadgeClick = async (filename) => {
     try {
-      const response = await fetch(`/templates/${filename}`); 
+      const response = await fetch(`/templates/${filename}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const text = await response.text(); 
+      const text = await response.text();
       setMarkdownText(text);
     } catch (error) {
       console.error('Error fetching the markdown file:', error);
     }
   };
 
+  // New function to handle download
+  const downloadMarkdown = () => {
+    const blob = new Blob([markdownText], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'README.md';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="w-full px-4 md:px-0 ">
-      <div className="md:w-[66rem] mx-auto mt-20 mb-4">
+      <div className="md:w-[66rem] mx-auto mt-24 mb-4">
         <h1 className="tagline text-5xl text-center font-semibold">
           Start Editing Your <span className='text-[#10B981]'>README.md</span> Now
         </h1>
@@ -84,8 +137,8 @@ Host: example.com
               <Badge
                 key={badge.id}
                 BadgeName={badge.name}
-                className={badge.className}
-                onClick={() => handleBadgeClick(badge.filename)} 
+                className={badge.className} // Ensure this is passed correctly
+                onClick={() => handleBadgeClick(badge.filename)}
               />
             ))}
           </div>
@@ -98,6 +151,10 @@ Host: example.com
               </button>
               <button onClick={clearText} className="icon-button text-red-400 font-semibold">
                 <Trash size={20} />
+              </button>
+              {/* Download button */}
+              <button onClick={downloadMarkdown} className="icon-button text-blue-400 font-semibold">
+                <Download size={20} />
               </button>
             </div>
             <textarea

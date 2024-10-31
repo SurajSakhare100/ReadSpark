@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "React README",
-    "className": "bg-green-300 text-green-800",
+    "className": "border bg-orange-300",
     "filename": "react.md",
     "readmeText": "# React Project\n\nThis is a React project README template. It covers all the basics of setting up, running, and deploying a React application.\n\n## Installation\n\n```bash\nnpm install\n```\n\n## Usage\n\n```bash\nnpm start\n```\n\n## Features\n- Component-based architecture\n- Hooks for managing state and side effects\n- Support for custom themes\n\nHappy coding!"
   },
