@@ -3,30 +3,35 @@
     "id": 1,
     "name": "React README",
     "className": "bg-green-300 text-green-800",
-    "filename": "react.md"
+    "filename": "react.md",
+    "readmeText": "# React Project\n\nThis is a React project README template. It covers all the basics of setting up, running, and deploying a React application.\n\n## Installation\n\n```bash\nnpm install\n```\n\n## Usage\n\n```bash\nnpm start\n```\n\n## Features\n- Component-based architecture\n- Hooks for managing state and side effects\n- Support for custom themes\n\nHappy coding!"
   },
   {
     "id": 2,
     "name": "Next.js README",
     "className": "bg-blue-300 text-blue-800",
-    "filename": "next.md"
+    "filename": "next.md",
+    "readmeText": "# Next.js Project\n\nThis template is designed for a Next.js project, providing details on setup and usage.\n\n## Getting Started\n\nFirst, install the dependencies:\n\n```bash\nnpm install\n```\n\nThen run the development server:\n\n```bash\nnpm run dev\n```\n\n## Key Features\n- Server-side rendering (SSR)\n- Static site generation (SSG)\n- API routes for backend functionality\n\nDeploy easily to Vercel!"
   },
   {
     "id": 3,
     "name": "Flask README",
     "className": "bg-orange-300 text-orange-800",
-    "filename": "flask.md"
+    "filename": "flask.md",
+    "readmeText": "# Flask Application\n\nThis README template provides a basic overview of a Flask project.\n\n## Setup\n\n1. Install dependencies:\n\n```bash\npip install -r requirements.txt\n```\n\n2. Run the application:\n\n```bash\nflask run\n```\n\n## Features\n- RESTful API support\n- Lightweight and fast\n- Jinja2 templating for dynamic HTML\n\nUse this template to start building Python-powered web apps!"
   },
   {
     "id": 4,
     "name": "Vue README",
     "className": "bg-violet-300 text-violet-800",
-    "filename": "vue.md"
+    "filename": "vue.md",
+    "readmeText": "# Vue Project\n\nA README template tailored for Vue projects. It includes setup, usage, and features.\n\n## Installation\n\n```bash\nnpm install\n```\n\n## Running the App\n\n```bash\nnpm run serve\n```\n\n## Features\n- Reactive data binding\n- Vue Router for single-page navigation\n- Vuex for state management\n\nPerfect for building dynamic, front-end applications!"
   },
   {
     "id": 5,
     "name": "GitHub Profile Readme",
     "className": "bg-gray-300 text-gray-800",
-    "filename": "profile.md"
+    "filename": "profile.md",
+    "readmeText": "# Hello, I'm [Your Name]! 👋\n\nWelcome to my GitHub profile! Here's a little about me.\n\n- 🔭 I’m currently working on exciting projects\n- 🌱 I’m learning new frameworks and technologies\n- 📫 How to reach me: [your.email@example.com]\n\n## Skills\n- Languages: JavaScript, Python, HTML, CSS\n- Frameworks: React, Vue, Flask\n\nThanks for stopping by!"
   }
 ]
