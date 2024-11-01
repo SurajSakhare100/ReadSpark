@@ -8,6 +8,7 @@ import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-http';
 import { Clipboard, Trash, Download } from 'lucide-react';
 import Badge from '../components/badge/Badge';
+import { Helmet } from 'react-helmet';
 // import {badgesData} from '../data.json';
 
 
@@ -124,8 +125,15 @@ Host: example.com
     URL.revokeObjectURL(url);
   };
 
+
   return (
     <div className="w-full px-4 md:px-0 ">
+      <Helmet>
+        <title>ReadSpark: Create stunning READMEs in seconds</title>
+        <meta name="description" content="Create stunning READMEs in seconds with ReadSpark. Easy to use, customizable templates for all your documentation needs." />
+        <meta name="keywords" content="README generator, documentation tool, markdown editor, open source, developer tools" />
+        <link rel="canonical" href="https://readspark.vercel.app/" />
+      </Helmet>
       <div className="md:w-[66rem] mx-auto mt-28 mb-4">
         <h1 className="tagline text-5xl text-center font-semibold">
           Start Editing Your <span className='text-[#10B981]'>README.md</span> Now
