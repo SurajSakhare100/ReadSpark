@@ -9,7 +9,7 @@ function Home() {
     return (
        <div>
         <Helmet>
-        <title>ReadSpark: Effortless README Creation</title>
+        <title>ReadSpark: Focus on your Projects, not the ReadMe</title>
         <meta name="description" content="Welcome to ReadSpark, your go-to solution for effortless README creation. Create stunning documentation with customizable templates!" />
         <meta name="keywords" content="README generator, documentation tool, markdown editor, open source, developer tools" />
         <link rel="canonical" href="https://readspark.vercel.app/" />
