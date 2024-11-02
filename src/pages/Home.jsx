@@ -4,6 +4,7 @@ import Features from '../components/sections/features/Features'
 import Testimonial from '../components/sections/testimonial/Testimonial'
 import Faq from '../components/sections/faq/Faq'
 import { Helmet } from 'react-helmet'
+import Footer from '../components/navigation/footer/Footer'
 
 function Home() {
     return (
@@ -18,6 +19,8 @@ function Home() {
         <Features/>
         {/* <Testimonial/> */}
         <Faq/>
+      <Footer />
+
        </div>
     )
 }

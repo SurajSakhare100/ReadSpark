@@ -4,7 +4,7 @@ import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import ReadmeGenerator from './pages/ReadmeGenerator';
 import Navbar from './components/navigation/navbar/Navbar';
-import Footer from './components/navigation/footer/Footer';
+// import Footer from './components/navigation/footer/Footer';
 import { Analytics } from "@vercel/analytics/react"
 import "preline/preline";
 import { IStaticMethods } from "preline/preline";
@@ -28,7 +28,6 @@ function App() {
         </Routes>
       </div>
 
-      <Footer />
       <SpeedInsights />
     </div>
   );

@@ -9,6 +9,8 @@ import 'prismjs/components/prism-http';
 import { Clipboard, Trash, Download } from 'lucide-react';
 import Badge from '../components/badge/Badge';
 import { Helmet } from 'react-helmet';
+import AdComponent from '../components/Ad/AdComponent';
+import Footer from '../components/navigation/footer/Footer';
 // import {badgesData} from '../data.json';
 
 
@@ -124,10 +126,12 @@ Host: example.com
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
+ 
 
 
   return (
-    <div className="w-full px-4 md:px-0 ">
+    <div>
+      <div className="w-full px-4 md:px-0 ">
       <Helmet>
         <title>ReadSpark: Create stunning READMEs in seconds</title>
         <meta name="description" content="Create stunning READMEs in seconds with ReadSpark. Easy to use, customizable templates for all your documentation needs." />
@@ -189,8 +193,11 @@ Host: example.com
             </div>
           </div>
         </div>
+        <AdComponent />
       </div>
       
+    </div>
+    <Footer/>
     </div>
   );
 };
