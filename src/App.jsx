@@ -8,6 +8,7 @@ import Footer from './components/navigation/footer/Footer';
 import { Analytics } from "@vercel/analytics/react"
 import "preline/preline";
 import { IStaticMethods } from "preline/preline";
+import { SpeedInsights } from '@vercel/speed-insights/react';
 function App() {
   const location = useLocation();
   useEffect(() => {
@@ -28,6 +29,7 @@ function App() {
       </div>
 
       <Footer />
+      <SpeedInsights />
     </div>
   );
 }
