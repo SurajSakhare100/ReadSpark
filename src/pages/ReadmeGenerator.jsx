@@ -10,7 +10,6 @@ import { Clipboard, Trash, Download } from 'lucide-react';
 import Badge from '../components/badge/Badge';
 import { Helmet } from 'react-helmet';
 import AdComponent from '../components/Ad/AdComponent';
-import Footer from '../components/navigation/footer/Footer';
 // import {badgesData} from '../data.json';
 
 
@@ -197,7 +196,6 @@ Host: example.com
       </div>
       
     </div>
-    <Footer/>
     </div>
   );
 };

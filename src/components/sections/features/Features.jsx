@@ -7,10 +7,10 @@ const FeatureItem = ({ icon, title, description }) => (
         <span className="shrink-0 inline-flex justify-center items-center w-[46px] h-[46px] rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm mx-auto">
             {icon}
         </span>
-        <div className="grow">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+        <div className="">
+            <p className="text-base sm:text-lg font-semibold text-gray-800">
                 {title}
-            </h3>
+            </p>
             <p className="mt-1 text-gray-600">
                 {description}
             </p>
@@ -41,7 +41,7 @@ const Features = () => {
                         Transform your documentation process with our intuitive tools designed specifically for README generation and Markdown editing.
                     </p>
                     <p className="mt-5">
-                        <Link to={'/markdown-editor'} className="inline-flex items-center gap-x-1 text-sm text-blue-600 font-medium hover:underline">
+                        <Link to={'/readme-generator'} className="inline-flex items-center gap-x-1 text-sm text-blue-600 font-medium hover:underline">
                             Start Creating Your README
                             <span className="ml-1 transition-transform duration-300 transform">
                                 <ArrowRight />

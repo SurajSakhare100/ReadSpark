@@ -27,11 +27,25 @@ function Navbar() {
                                     <svg className="shrink-0 size-4 me-3 md:me-2 block md:hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
                                     Landing
                                 </Link>
+                                
 
                               
                                 <Link to='/readme-generator' className={`p-2 flex items-center text-sm ${location.pathname === '/readme-generator' ? 'text-blue-600' : 'text-gray-800'} hover:text-gray-500`} aria-current={location.pathname === '/readme-generator' ? 'page' : undefined}>
                                    <File className='shrink-0 size-4 me-3 md:me-2 block md:hidden'/>
                                    Readme Generator
+                                </Link>
+                                <Link to='/blog' className={`p-2 flex items-center text-sm ${location.pathname === '/blog' ? 'text-blue-600' : 'text-gray-800'} hover:text-gray-500 focus:outline-none`} aria-current={location.pathname === '/blog' ? 'page' : undefined}>
+                                    <svg className="shrink-0 size-4 me-3 md:me-2 block md:hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
+                                    Blog
+                                </Link>
+                                <Link to='/about' className={`p-2 flex items-center text-sm ${location.pathname === '/about' ? 'text-blue-600' : 'text-gray-800'} hover:text-gray-500 focus:outline-none`} aria-current={location.pathname === '/about' ? 'page' : undefined}>
+                                    <svg className="shrink-0 size-4 me-3 md:me-2 block md:hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
+                                    About us
+                                </Link>
+                               
+                                <Link to='/contactus' className={`p-2 flex items-center text-sm ${location.pathname === '/contactus' ? 'text-blue-600' : 'text-gray-800'} hover:text-gray-500 focus:outline-none`} aria-current={location.pathname === '/contactus' ? 'page' : undefined}>
+                                    <svg className="shrink-0 size-4 me-3 md:me-2 block md:hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
+                                    Contact Us
                                 </Link>
 
                                 <div className="relative flex flex-wrap items-center gap-x-1.5 md:ps-2.5  md:ms-1.5 before:block before:absolute before:top-1/2 before:-start-px before:w-px before:h-4 before:bg-gray-300 before:-translate-y-1/2 dark:before:bg-neutral-700">
