@@ -53,30 +53,7 @@ const badgesData = [
 
 
 const ReadmeGenerator = () => {
-  const [markdownText, setMarkdownText] = useState(`
-# Hello, Markdown!
-## This is a list:
-- Item 1
-- Item 2
-  - Sub-item 1
-  - Sub-item 2
-
-## And here is a table:
-| Header 1 | Header 2 |
-|----------|----------|
-| Row 1    | Data 1   |
-| Row 2    | Data 2   |
-
-## Task List:
-- [x] Task 1
-- [ ] Task 2
-
-## Code Examples:
-\`\`\`http
-GET /api/data
-Host: example.com
-\`\`\`
-  `);
+  const [markdownText, setMarkdownText] = useState(badgesData[4].readmeText);
 
   const [view, setView] = useState('preview');
   const md = new MarkdownIt().use(markdownItTaskLists);
