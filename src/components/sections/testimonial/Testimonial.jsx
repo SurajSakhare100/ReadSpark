@@ -1,11 +1,6 @@
 import React from 'react';
 
-/**
- * Testimonial Component for ReadSpark
- * 
- * The Testimonial component displays feedback from users about 
- * the quality and utility of the README documentation for ReadSpark. 
- */
+
 function Testimonial() {
     return (
         <div className='w-full'>
