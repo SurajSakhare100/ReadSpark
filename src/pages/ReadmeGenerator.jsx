@@ -169,7 +169,7 @@ const ReadmeGenerator = () => {
             </div>
           </div>
         </div>
-    <a href="https://www.buymeacoffee.com/sakharesurx" target="_blank" className='fixed left-4 top-[88%] z-50'><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" className='h-12 w-48' /></a>
+    <a href="https://buymeacoffee.com/sakharesuraj10" target="_blank" className='fixed left-4 top-[88%] z-50'><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" className='h-12 w-48' /></a>
       </div>
       
     </div>
