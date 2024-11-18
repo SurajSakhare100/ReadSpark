@@ -6,7 +6,7 @@ function Contact() {
   };
 
   const handlePhoneClick = () => {
-    window.location.href = "tel:+919876543210"; // Update with your actual phone number
+    window.location.href = "tel:+919999999999"; 
   };
 
   return (
