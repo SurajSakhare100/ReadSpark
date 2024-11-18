@@ -131,28 +131,28 @@ const ReadmeGenerator = () => {
             ))}
           </div>
         </div>
-        <div className="flex flex-col gap-4 md:flex-row w-full pt-4 md:h-auto ">
-          <div className="flex flex-col gap-2 md:w-1/2 h-1/2 md:h-full">
-            <div className="flex gap-4 justify-end pb-2">
-              <button onClick={copyToClipboard} className="icon-button text-green-400 font-semibold">
+        <div className="flex flex-col md:flex-row gap-16 md:gap-4 w-full pt-4 h-screen md:h-[600px] py-10 ">
+          <div className="editor-section md:w-1/2 h-1/2 md:h-full">
+            <div className="flex justify-end pb-2 gap-4">
+              <button onClick={copyToClipboard} className="icon-button text-green-400">
                 <Clipboard size={20} />
               </button>
-              <button onClick={clearText} className="icon-button text-red-400 font-semibold">
+              <button onClick={clearText} className="icon-button text-red-400">
                 <Trash size={20} />
               </button>
-              {/* Download button */}
-              <button onClick={downloadMarkdown} className="icon-button text-blue-400 font-semibold">
+              <button onClick={downloadMarkdown} className="icon-button text-blue-400">
                 <Download size={20} />
               </button>
             </div>
             <textarea
-              className="textarea border rounded-md p-4 !h-[32rem]  w-full flex-shrink-0"
+              className="h-full border rounded-md p-4 w-full "
               value={markdownText}
               onChange={handleChange}
             />
           </div>
-          <div className="md:w-1/2 flex flex-col h-1/2 md:h-full">
-            <div className="flex gap-2 justify-end options pb-3">
+
+          <div className=" md:w-1/2 h-1/2 md:h-full">
+            <div className="flex gap-2 justify-end pb-3">
               <button onClick={() => setView('preview')} className={view === 'preview' ? 'active' : ''}>
                 Preview
               </button>
@@ -160,11 +160,11 @@ const ReadmeGenerator = () => {
                 Raw
               </button>
             </div>
-            <div className="preview border p-4 rounded-lg h-full">
+            <div className="preview border p-4 rounded-lg h-full overflow-y-scroll">
               {view === 'preview' ? (
-                <div dangerouslySetInnerHTML={{ __html: renderedMarkdown }} className='h-full overflow-y-scroll' />
+                <div dangerouslySetInnerHTML={{ __html: renderedMarkdown }} />
               ) : (
-                <pre className="raw">{markdownText}</pre>
+                <pre>{markdownText}</pre>
               )}
             </div>
           </div>
