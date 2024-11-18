@@ -32,8 +32,8 @@ function HeroSection() {
         
       </div>
         <div className='absolute top-[25%] sm:top-auto left-[50%] -translate-x-[50%] sm:translate-x-0 sm:bottom-8 sm:left-8'>
-        <a href="https://www.producthunt.com/posts/readspark?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-readspark" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=561605&theme=light" alt="ReadSpark - Focus&#0032;on&#0032;your&#0032;Projects&#0044;&#0032;not&#0032;the&#0032;ReadMe | Product Hunt"   
-        width="250" height="54" /></a>
+        {/* <a href="https://www.producthunt.com/posts/readspark?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-readspark" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=561605&theme=light" alt="ReadSpark - Focus&#0032;on&#0032;your&#0032;Projects&#0044;&#0032;not&#0032;the&#0032;ReadMe | Product Hunt"   
+        width="250" height="54" /></a> */}
         </div>
     </div>
   );
