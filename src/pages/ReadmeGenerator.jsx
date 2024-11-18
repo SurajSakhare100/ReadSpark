@@ -169,7 +169,6 @@ const ReadmeGenerator = () => {
             </div>
           </div>
         </div>
-        <AdComponent />
       </div>
       
     </div>
