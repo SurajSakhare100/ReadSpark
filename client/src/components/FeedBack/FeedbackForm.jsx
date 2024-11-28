@@ -70,9 +70,8 @@ const FeedbackForm = ({isModalOpen,toggleModal}) => {
     const recaptchaResponse = await axios.post(`${backendurl}/api/verify-recaptcha`, {
        recaptchaValue 
     });
-    console.log(recaptchaResponse)
 
-    if (!recaptchaResponse.success) {
+    if (!recaptchaResponse.data.success) {
       alert("reCAPTCHA validation failed. Please try again.");
       return;
     }
