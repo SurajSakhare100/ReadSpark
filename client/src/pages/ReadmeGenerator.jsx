@@ -9,7 +9,7 @@ import 'prismjs/components/prism-http';
 import { Clipboard, Trash, Download } from 'lucide-react';
 import Badge from '../components/badge/Badge';
 import { Helmet } from 'react-helmet';
-import AdComponent from '../components/Ad/AdComponent';
+import FeedbackForm from '../components/FeedBack/FeedbackForm';
 // import {badgesData} from '../data.json';
 
 
@@ -54,6 +54,8 @@ const badgesData = [
 
 const ReadmeGenerator = () => {
   const [markdownText, setMarkdownText] = useState(badgesData[4].readmeText);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const [view, setView] = useState('preview');
   const md = new MarkdownIt().use(markdownItTaskLists);
@@ -64,6 +66,9 @@ const ReadmeGenerator = () => {
 
   const handleChange = (event) => {
     setMarkdownText(event.target.value);
+  };
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   const renderedMarkdown = md.render(markdownText);
@@ -169,10 +174,14 @@ const ReadmeGenerator = () => {
             </div>
           </div>
         </div>
-    <a href="https://buymeacoffee.com/sakharesuraj10" target="_blank" className='fixed left-4 top-[88%] z-50'><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" className='h-12 w-48' /></a>
+    <a href="https://buymeacoffee.com/sakharesuraj10" target="_blank" className='hidden sm:block fixed left-4 bottom-8 z-50'><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" className='h-12 w-48' /></a>
       </div>
       
     </div>
+    <button onClick={toggleModal} className="hidden sm:block fixed font-sans font-semibold right-3 leading-snug tracking-tight bottom-8 top-[h-screen-20px] px-4 py-2 bg-green-400 text-white rounded hover:bg-green-600 focus:outline-none">
+         Your Feedback Matters ❤️
+      </button>
+    <FeedbackForm isModalOpen={isModalOpen} toggleModal={toggleModal}/>
 
     </div>
   );
