@@ -1,9 +1,16 @@
 import express  from 'express';
 import axios from 'axios';
+import cors from 'cors'
 const app = express();
 app.use(express.json());
 
 // Verify reCAPTCHA endpoint
+const clientURL =process.env.FRONTEND_URL;
+app.use(cors({
+  origin: clientURL,
+  credentials: true,
+}));
+
 const PORT =process.env.PORT || 3000
 app.post('/api/verify-recaptcha', async (req, res) => {
   const recaptchaValue = req.body.recaptchaValue;
