@@ -24,7 +24,6 @@ app.post('/api/verify-recaptcha', async (req, res) => {
 
   try {
     const response = await axios.post(recaptchaUrl,{recaptchaUrl});
-    console.log(response)
 
     if (response.success) {
       return res.json({ success: true });

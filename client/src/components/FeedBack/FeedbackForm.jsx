@@ -60,21 +60,21 @@ const FeedbackForm = ({isModalOpen,toggleModal}) => {
         return;
       }
   
-    // if (!recaptchaValue) {
-    //     alert("reCAPTCHA needed.");
-    //     return;
-    //   }
+    if (!recaptchaValue) {
+        alert("reCAPTCHA needed.");
+        return;
+      }
   
 
-    // // Backend validation for reCAPTCHA
-    // const recaptchaResponse = await axios.post(`${backendurl}/api/verify-recaptcha`, {
-    //    recaptchaValue 
-    // });
+    // Backend validation for reCAPTCHA
+    const recaptchaResponse = await axios.post(`${backendurl}/api/verify-recaptcha`, {
+       recaptchaValue 
+    });
 
-    // if (!recaptchaResponse.success) {
-    //   alert("reCAPTCHA validation failed. Please try again.");
-    //   return;
-    // }
+    if (!recaptchaResponse.success) {
+      alert("reCAPTCHA validation failed. Please try again.");
+      return;
+    }
 
     const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
     const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
@@ -94,7 +94,7 @@ const FeedbackForm = ({isModalOpen,toggleModal}) => {
       )
       .then(
         (response) => {
-          console.log("Feedback sent successfully!", response.status, response.text);
+          // console.log("Feedback sent successfully!", response.status, response.text);
           setSubmitted(true);
           setFormData({
             name: "",
