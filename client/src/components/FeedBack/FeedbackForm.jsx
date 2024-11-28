@@ -60,14 +60,18 @@ const FeedbackForm = ({isModalOpen,toggleModal}) => {
         return;
       }
   
+    if (!recaptchaValue) {
+        alert("reCAPTCHA needed.");
+        return;
+      }
+  
 
     // Backend validation for reCAPTCHA
     const recaptchaResponse = await axios.post(`${backendurl}/api/verify-recaptcha`, {
        recaptchaValue 
     });
 
-    const recaptchaData = await recaptchaResponse.json();
-    if (!recaptchaData.success) {
+    if (!recaptchaResponse.success) {
       alert("reCAPTCHA validation failed. Please try again.");
       return;
     }
