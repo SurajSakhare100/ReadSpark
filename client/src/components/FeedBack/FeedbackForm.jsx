@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 import ReCAPTCHA from "react-google-recaptcha";
 import { emailValidator, nameValidator } from "../../utils/emailValidator"; // Assuming you have a custom emailValidator
-
+import axios from 'axios'
 const FeedbackForm = ({isModalOpen,toggleModal}) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -62,12 +62,8 @@ const FeedbackForm = ({isModalOpen,toggleModal}) => {
   
 
     // Backend validation for reCAPTCHA
-    const recaptchaResponse = await fetch(`${backendurl}/api/verify-recaptcha`, {
-      method: 'POST',
-      body: JSON.stringify({ recaptchaValue }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const recaptchaResponse = await axios.post(`${backendurl}/api/verify-recaptcha`, {
+       recaptchaValue 
     });
 
     const recaptchaData = await recaptchaResponse.json();

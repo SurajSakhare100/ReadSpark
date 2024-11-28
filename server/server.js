@@ -1,6 +1,5 @@
 import express  from 'express';
-import fetch  from 'node-fetch'; // Make sure to install node-fetch
-
+import axios from 'axios';
 const app = express();
 app.use(express.json());
 
@@ -9,7 +8,6 @@ const PORT =process.env.PORT || 3000
 app.post('/api/verify-recaptcha', async (req, res) => {
   const recaptchaValue = req.body.recaptchaValue;
 
-  // Check if recaptchaValue exists
   if (!recaptchaValue) {
     return res.status(400).json({ success: false, message: 'reCAPTCHA token missing' });
   }
@@ -18,7 +16,7 @@ app.post('/api/verify-recaptcha', async (req, res) => {
   const recaptchaUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaValue}`;
 
   try {
-    const response = await fetch(recaptchaUrl, { method: 'POST' });
+    const response = await axios.post(recaptchaUrl,{recaptchaUrl});
     const data = await response.json();
 
     if (data.success) {
