@@ -178,10 +178,10 @@ const ReadmeGenerator = () => {
       </div>
       
     </div>
-    <button onClick={toggleModal} className="hidden sm:block fixed font-sans font-semibold right-3 leading-snug tracking-tight bottom-8 top-[h-screen-20px] px-4 py-2 bg-green-400 text-white rounded hover:bg-green-600 focus:outline-none">
+    {/* <button onClick={toggleModal} className="hidden sm:block fixed font-sans font-semibold right-3 leading-snug tracking-tight bottom-8 top-[h-screen-20px] px-4 py-2 bg-green-400 text-white rounded hover:bg-green-600 focus:outline-none">
          Your Feedback Matters ❤️
-      </button>
-    <FeedbackForm isModalOpen={isModalOpen} toggleModal={toggleModal}/>
+      </button> */}
+    {/* <FeedbackForm isModalOpen={isModalOpen} toggleModal={toggleModal}/> */}
 
     </div>
   );
