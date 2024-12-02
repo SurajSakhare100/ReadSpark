@@ -18,17 +18,17 @@ const FeatureItem = ({ icon, title, description }) => (
     </div>
 );
 
-const Features = () => {
+const Features = ({download}) => {
     return (
-        <section className="max-w-[66rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+        <section className="max-w-[66rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 xl:py-0 mx-auto">
             <h1 className='text-center font-semibold text-4xl mb-8' aria-level="1">
                 Our Features
             </h1>
             <div className="max-w-5xl mx-auto">
                 <div className="border shadow-sm rounded-xl p-4  text-black grid grid-cols-1 sm:grid-cols-3 gap-y-20 gap-x-12">
                     <StatItem icon="✍️" stat="5+" description="Markdown Formats Supported" />
-                    <StatItem icon="👍" stat="1,000+" description="Users Served" />
-                    <StatItem icon="📄" stat="50+ Downloads" description="Daily README Files" />
+                    <StatItem icon="👍" stat={Math.round(download/2.3) + `+`} description="Users Served" />
+                    <StatItem icon="📄" stat={download + `+`} description="README Files Downloads" />
                 </div>
             </div>
 

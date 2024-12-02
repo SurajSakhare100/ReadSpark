@@ -11,13 +11,13 @@ function Testimonial() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-y border-gray-200 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
                     <TestimonialItem
                         text="ReadSpark's README is incredibly comprehensive and easy to follow. It made onboarding a breeze and helped me understand the project quickly!"
-                        name="Vaibhav Suryawansi"
+                        name="Vaibhav More"
                         role="Data Analyst"
                         imageSrc="https://avatars.githubusercontent.com/u/144354322?v=4"
                     />
                     <TestimonialItem
                         text="I found the README for ReadSpark to be an excellent resource. It provided clear installation steps and detailed usage examples that really helped me get started."
-                        name="Abhinav Shinde"
+                        name="Aditya pawase"
                         role="Software Developer"
                         imageSrc="https://avatars.githubusercontent.com/u/143414991?v=4"
                     />

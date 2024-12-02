@@ -10,6 +10,7 @@ import { Clipboard, Trash, Download } from 'lucide-react';
 import Badge from '../components/badge/Badge';
 import { Helmet } from 'react-helmet';
 import FeedbackForm from '../components/FeedBack/FeedbackForm';
+import axios from 'axios';
 // import {badgesData} from '../data.json';
 
 
@@ -18,6 +19,7 @@ const badgesData = [
     "id": 1,
     "name": "React README",
     "className": "bg-green-300 text-green-800",
+    "download": "bg-green-800 text-green-300",
     "filename": "react.md",
     "readmeText": "# React Project\n\nThis is a React project README template. It covers all the basics of setting up, running, and deploying a React application.\n\n## Installation\n\n```bash\nnpm install\n```\n\n## Usage\n\n```bash\nnpm start\n```\n\n## Features\n- Component-based architecture\n- Hooks for managing state and side effects\n- Support for custom themes\n\nHappy coding!"
   },
@@ -25,6 +27,7 @@ const badgesData = [
     "id": 2,
     "name": "Next.js README",
     "className": "bg-blue-300 text-blue-800",
+    "download": "bg-blue-800 text-blue-300",
     "filename": "next.md",
     "readmeText": "# Next.js Project\n\nThis template is designed for a Next.js project, providing details on setup and usage.\n\n## Getting Started\n\nFirst, install the dependencies:\n\n```bash\nnpm install\n```\n\nThen run the development server:\n\n```bash\nnpm run dev\n```\n\n## Key Features\n- Server-side rendering (SSR)\n- Static site generation (SSG)\n- API routes for backend functionality\n\nDeploy easily to Vercel!"
   },
@@ -32,6 +35,7 @@ const badgesData = [
     "id": 3,
     "name": "Flask README",
     "className": "bg-orange-300 text-orange-800",
+    "download": "bg-orange-800 text-orange-300",
     "filename": "flask.md",
     "readmeText": "# Flask Application\n\nThis README template provides a basic overview of a Flask project.\n\n## Setup\n\n1. Install dependencies:\n\n```bash\npip install -r requirements.txt\n```\n\n2. Run the application:\n\n```bash\nflask run\n```\n\n## Features\n- RESTful API support\n- Lightweight and fast\n- Jinja2 templating for dynamic HTML\n\nUse this template to start building Python-powered web apps!"
   },
@@ -39,13 +43,15 @@ const badgesData = [
     "id": 4,
     "name": "Vue README",
     "className": "bg-violet-300 text-violet-800",
+    "download": "bg-violet-800 text-violet-300",
     "filename": "vue.md",
     "readmeText": "# Vue Project\n\nA README template tailored for Vue projects. It includes setup, usage, and features.\n\n## Installation\n\n```bash\nnpm install\n```\n\n## Running the App\n\n```bash\nnpm run serve\n```\n\n## Features\n- Reactive data binding\n- Vue Router for single-page navigation\n- Vuex for state management\n\nPerfect for building dynamic, front-end applications!"
   },
   {
     "id": 5,
     "name": "GitHub Profile Readme",
-    "className": "bg-yellow-300 text-gray-800",
+    "className": "bg-yellow-300 text-yellow-800",
+    "download": "bg-yellow-800 text-yellow-300",
     "filename": "profile.md",
     "readmeText": "# Hello, I'm [Your Name]! 👋\n\nWelcome to my GitHub profile! Here's a little about me.\n\n- 🔭 I’m currently working on exciting projects\n- 🌱 I’m learning new frameworks and technologies\n- 📫 How to reach me: [your.email@example.com]\n\n## Skills\n- Languages: JavaScript, Python, HTML, CSS\n- Frameworks: React, Vue, Flask\n\nThanks for stopping by!"
   }
@@ -55,7 +61,9 @@ const badgesData = [
 const ReadmeGenerator = () => {
   const [markdownText, setMarkdownText] = useState(badgesData[4].readmeText);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [files, setFiles] = useState(null);
+  const [fileName,setFilename]=useState(badgesData[4].filename)
+  const backend_url=import.meta.env.VITE_BACKEND_URL;
 
   const [view, setView] = useState('preview');
   const md = new MarkdownIt().use(markdownItTaskLists);
@@ -82,6 +90,23 @@ const ReadmeGenerator = () => {
     setMarkdownText('');
   };
 
+  useEffect(()=>{
+    const fetchData=  async()=>{
+       try {
+         const response=await axios.get(`${backend_url}/api/download-stats`)
+         const files=response.data.files
+         if(files){
+           setFiles(files)
+         }
+
+         
+     } catch (error) {
+         console.error('Failed  download count:', error);
+     }
+     }
+     fetchData()
+   },[])
+
   const handleBadgeClick = async (filename) => {
     try {
       const response = await fetch(`/templates/${filename}`);
@@ -92,23 +117,33 @@ const ReadmeGenerator = () => {
       setMarkdownText(text);
     } catch (error) {
       console.error('Error fetching the markdown file:', error);
+    }finally{
+      setFilename(filename)
     }
   };
 
   // New function to handle download
-  const downloadMarkdown = () => {
+  const downloadMarkdown = async () => {
     const blob = new Blob([markdownText], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'README.md';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
- 
 
+    try {
+        // Sending a request to the backend to increase download count
+        await axios.post(`${backend_url}/api/increase-download-count`, {
+          fileName,
+        });
+    } catch (error) {
+        console.error('Failed to increase download count:', error);
+    } finally {
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'README.md';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+};
 
   return (
     <div>
@@ -130,7 +165,10 @@ const ReadmeGenerator = () => {
               <Badge
                 key={badge.id}
                 BadgeName={badge.name}
-                className={badge.className} // Ensure this is passed correctly
+                className={badge.className} 
+                downloadClassName={badge.download}
+                fileName={badge.filename} 
+                files={files}
                 onClick={() => handleBadgeClick(badge.filename)}
               />
             ))}
