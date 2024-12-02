@@ -122,28 +122,40 @@ const ReadmeGenerator = () => {
     }
   };
 
-  // New function to handle download
-  const downloadMarkdown = async () => {
-    const blob = new Blob([markdownText], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
+  const [lastRequestTime, setLastRequestTime] = useState(0);
 
-    try {
-        // Sending a request to the backend to increase download count
-        await axios.post(`${backend_url}/api/increase-download-count`, {
-          fileName,
-        });
-    } catch (error) {
-        console.error('Failed to increase download count:', error);
-    } finally {
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'README.md';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    }
+const downloadMarkdown = async () => {
+  const currentTime = Date.now();
+
+  if (currentTime - lastRequestTime < 10000) {
+    alert("You're trying to download too quickly. Please make some changes to the README or wait a few seconds before trying again.");
+    return;
+  }
+
+  const blob = new Blob([markdownText], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+
+  try {
+    // Send request to the backend to increase the download count
+    await axios.post(`${backend_url}/api/increase-download-count`, {
+      fileName,
+    });
+  } catch (error) {
+    console.error('Failed to increase download count:', error);
+  } finally {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'README.md';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    // Update the last request time
+    setLastRequestTime(currentTime);
+  }
 };
+
 
   return (
     <div>
