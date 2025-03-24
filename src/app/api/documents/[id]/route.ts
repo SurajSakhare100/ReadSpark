@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import  connectDB  from '@/lib/db';
 import Document from '@/lib/models/Document';
-import  {authOptions}  from '@/app/api/auth/[...nextauth]/route';
+import  {authOptions}  from '@/app/api/auth/[...nextauth]/config';
 
 export async function DELETE(
-  req: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -42,7 +42,7 @@ export async function DELETE(
 }
 
 export async function GET(
-  req: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -76,7 +76,7 @@ export async function GET(
 }
 
 export async function PUT(
-  req: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -100,7 +100,7 @@ export async function PUT(
       );
     }
 
-    const body = await req.json();
+    const body = await request.json();
     const { title, description, languages, license, sections, content } = body;
 
     const updatedDoc = await Document.findByIdAndUpdate(
