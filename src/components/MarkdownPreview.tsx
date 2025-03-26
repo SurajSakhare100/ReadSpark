@@ -27,7 +27,7 @@ export default function MarkdownPreview({ content, className = '' }: MarkdownPre
   };
 
   return (
-    <div className={`prose prose-sm md:prose-base lg:prose-lg dark:prose-invert max-w-none ${className}`}>
+    <div className={`prose prose-sm md:prose-base lg:prose-lg dark:prose-invert max-w-none overflow-hidden max-h-[80vh] ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}

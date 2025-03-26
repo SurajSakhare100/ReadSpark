@@ -33,6 +33,11 @@ interface Document {
   defaultBranch?: string;
 }
 
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { SiGithub } from 'react-icons/si';
+import GitHubRepoDropdown from '@/components/GitHubRepoDropdown';
+
 export default function DashboardPage() {
   const router = useRouter();
   const { data: session } = useSession();
@@ -185,24 +190,23 @@ export default function DashboardPage() {
               Manage and organize your documentation projects
             </p>
           </div>
-          <Link
-            href="/create"
-            className="flex items-center gap-2 px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            New Project
-          </Link>
+          <Button asChild>
+            <Link href="/create">
+              <Plus className="h-4 w-4" />
+              New Project
+            </Link>
+          </Button>
         </div>
 
         <div className="mb-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search projects..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-600 rounded-lg bg-white text-black focus:border-black focus:ring-1 focus:ring-black transition-colors"
+              className="w-full pl-10 pr-4 py-2 bg-background border rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
         </div>
@@ -213,30 +217,8 @@ export default function DashboardPage() {
             <GitHubProjectsDropdown onSelectProject={handleSelectProject} />
           </div>
 
-          <div className="min-h-[200px] bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            {loading && (
-              <div className="flex items-center justify-center h-40">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white"></div>
-              </div>
-            )}
-            
-            {error && (
-              <div className="text-red-500 text-center p-4">
-                {error}
-              </div>
-            )}
-
-            {!loading && !error && !readmeContent && (
-              <div className="text-gray-500 dark:text-gray-400 text-center p-4">
-                Select a GitHub project to view its README
-              </div>
-            )}
-
-            {!loading && !error && readmeContent && (
-              <MarkdownPreview content={readmeContent} />
-            )}
+         
           </div>
-        </div>
 
         {loading ? (
           <div className="flex items-center justify-center min-h-[200px]">
@@ -301,8 +283,8 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
+                  <div className="flex items-center gap-2 ">
+                    <Button
                       onClick={(e) => {
                         e.preventDefault();
                         window.location.href = `/editor/${doc._id}`;
@@ -311,8 +293,8 @@ export default function DashboardPage() {
                       title="Edit"
                     >
                       <Edit3 className="h-4 w-4 text-white" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={(e) => {
                         e.preventDefault();
                         handleDelete(doc._id);
@@ -321,8 +303,8 @@ export default function DashboardPage() {
                       title="Delete"
                     >
                       <Trash2 className="h-4 w-4 text-white" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={(e) => {
                         e.preventDefault();
                         // Implement download functionality
@@ -331,7 +313,7 @@ export default function DashboardPage() {
                       title="Download"
                     >
                       <Download className="h-4 w-4 text-white" />
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </Link>
@@ -341,4 +323,4 @@ export default function DashboardPage() {
       </main>
     </div>
   );
-} 
+}

@@ -1,45 +1,25 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-const projectSchema = new mongoose.Schema({
-  userId: {
-    type: String,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  language: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    enum: ['readme', 'profile', 'documentation'],
-    required: true,
-  },
-  content: {
-    type: String,
-    required: true,
-  },
-  githubRepo: {
-    type: String,
-    required: false,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
+export interface IProject {
+  userId: string;
+  docId: string;
+  title: string;
+  isGithubRepo: boolean;
+  repoUrl?: string;
+  visibility?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const projectSchema = new Schema<IProject>({
+  userId: { type: String, required: true },
+  docId: { type: String, required: true },
+  title: { type: String, required: true },
+  isGithubRepo: { type: Boolean, default: false },
+  repoUrl: { type: String },
+  visibility: { type: String }
 });
 
-const Project = mongoose.models.Project || mongoose.model('Project', projectSchema);
+export const Project = mongoose.models.Project || mongoose.model<IProject>('Project', projectSchema);
 
-export default Project; 
+export default Project;

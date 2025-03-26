@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import connectDB from '@/lib/db';
-import Document from '@/lib/models/Document';
+import Document from '@/models/Document';
 import { authOptions } from '@/app/api/auth/[...nextauth]/config';
 
 export async function GET(
@@ -17,7 +17,7 @@ export async function GET(
     await connectDB();
 
     const document = await Document.findOne({
-      _id: params.id,
+      _id: await params.id,
       userId: session.user.id,
     });
 
@@ -51,7 +51,7 @@ export async function PUT(
     await connectDB();
 
     const existingDoc = await Document.findOne({
-      _id: params.id,
+      _id:await params.id,
       userId: session.user.id,
     });
 
@@ -66,7 +66,7 @@ export async function PUT(
     const { title, description, languages, license, sections, content } = body;
 
     const updatedDoc = await Document.findByIdAndUpdate(
-      params.id,
+      await params.id,
       {
         title,
         description,
@@ -101,7 +101,7 @@ export async function DELETE(
     await connectDB();
 
     const document = await Document.findOne({
-      _id: params.id,
+      _id: await params.id,
       userId: session.user.id,
     });
 

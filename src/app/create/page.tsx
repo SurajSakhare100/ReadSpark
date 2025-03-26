@@ -1,6 +1,6 @@
 'use client';
-
 import { useState, useEffect } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { Check, FileText, Book, Package, Scale, ChevronRight, ChevronLeft, Sparkles } from 'lucide-react';
 import { SiJavascript, SiTypescript, SiPython, SiGo, SiRust, SiCplusplus, SiRuby, SiPhp, SiKotlin, SiSwift, SiDart, SiScala, SiR, SiPerl } from 'react-icons/si';
@@ -54,6 +54,7 @@ const sections = [
 
 export default function CreateProject() {
   const router = useRouter();
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [docId, setDocId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -115,7 +116,7 @@ export default function CreateProject() {
       languages.find(l => l.id === lang)?.icon
     ).join(' ')}
 
-${formData.description}
+${formData.description || ''}
 
 ## Technologies Used
 ${formData.languages.map(lang => 
@@ -167,7 +168,54 @@ ${formData.sections.includes('dependencies') ? '### Dependencies\nList of projec
     }
   };
 
+  const validateStep = () => {
+    switch(currentStep) {
+      case 1:
+        if (!formData.title.trim()) {
+          toast({
+            title: "Required Field Missing",
+            description: "Please enter a project title",
+            variant: "destructive"
+          });
+          return false;
+        }
+        return true;
+      case 2:
+        if (formData.languages.length === 0) {
+          toast({
+            title: "Required Field Missing",
+            description: "Please select at least one language",
+            variant: "destructive"
+          });
+          return false;
+        }
+        if (!formData.license) {
+          toast({
+            title: "Required Field Missing",
+            description: "Please select a license",
+            variant: "destructive"
+          });
+          return false;
+        }
+        return true;
+      case 3:
+        if (formData.sections.length === 0) {
+          toast({
+            title: "Required Field Missing",
+            description: "Please select at least one section",
+            variant: "destructive"
+          });
+          return false;
+        }
+        return true;
+      default:
+        return true;
+    }
+  };
+
   const handleNext = async () => {
+    if (!validateStep()) return;
+    
     if (currentStep === 3) {
       // Generate the preview content if not already done
       if (!previewMarkdown) {
@@ -196,21 +244,30 @@ ${formData.sections.includes('dependencies') ? '### Dependencies\nList of projec
               <h2>Basic Information</h2>
             </div>
             <div className="space-y-4">
-              <input
-                type="text"
-                value={formData.title}
-                onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                className="w-full p-3 rounded-lg bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-                placeholder="Project Title"
-                required
-              />
-              <textarea
-                value={formData.description}
-                onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                className="w-full p-3 rounded-lg bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary transition-colors min-h-[100px]"
-                placeholder="A brief description of your project..."
-                required
-              />
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">
+                  Project Title <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  className="w-full p-3 rounded-lg bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                  placeholder="Enter your project title"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">
+                  Project Description 
+                </label>
+                <textarea
+                  value={formData.description}
+                  onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  className="w-full p-3 rounded-lg bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary transition-colors min-h-[100px]"
+                  placeholder="Enter a brief description of your project"
+                />
+              </div>
             </div>
           </div>
         );
@@ -221,7 +278,7 @@ ${formData.sections.includes('dependencies') ? '### Dependencies\nList of projec
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-xl font-semibold">
                 <Book className="h-6 w-6 text-primary" />
-                <h2>Languages & Technologies</h2>
+                <h2>Languages & Technologies <span className="text-red-500">*</span></h2>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {languages.map(lang => (
@@ -248,7 +305,7 @@ ${formData.sections.includes('dependencies') ? '### Dependencies\nList of projec
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-xl font-semibold">
                 <Scale className="h-6 w-6 text-primary" />
-                <h2>License</h2>
+                <h2>License <span className="text-red-500">*</span></h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {licenses.map(license => (
@@ -283,7 +340,7 @@ ${formData.sections.includes('dependencies') ? '### Dependencies\nList of projec
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-xl font-semibold">
               <Package className="h-6 w-6 text-primary" />
-              <h2>Documentation Sections</h2>
+              <h2>Documentation Sections <span className="text-red-500">*</span></h2>
             </div>
             <div className="grid gap-3">
               {sections.map(section => (
