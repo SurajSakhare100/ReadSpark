@@ -1,21 +1,20 @@
 import { Inter } from 'next/font/google';
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/theme-provider";
 import AuthProvider from '@/components/providers/AuthProvider';
-import { Navigation } from '@/components/Navigation';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'ReadSpark - AI-Powered Documentation Generator',
+  title: 'ReadSpark - AI-Powered Github Documentation Generator',
   description: 'Generate beautiful documentation with AI',
 };
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -29,9 +28,9 @@ export default function RootLayout({
           <AuthProvider>
             {children}
           </AuthProvider>
-            <Toaster />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

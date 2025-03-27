@@ -6,58 +6,57 @@
   :root {
     --background: 240 10% 98%; /* Slightly grayer background */
     --foreground: 252 100% 13%;
-
+  
     --primary: 252 100% 60%;
     --primary-foreground: 240 100% 99%;
-
+  
     --secondary: 0 0% 100%; /* White for light mode */
     --secondary-foreground: 252 100% 13%;
-
+  
     --muted: 240 8% 90%; /* Light gray for muted */
     --muted-foreground: 240 10% 30%; /* Darker gray for contrast */
-
+  
     --accent: 240 6% 95%; /* Very light gray for accent */
     --accent-foreground: 252 100% 13%;
-
+  
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 240 100% 99%;
-
+  
     --border: 240 8% 85%; /* Grayish border */
     --input: 240 8% 85%; /* Grayish input */
     --ring: 252 100% 60%;
-
+  
     --radius: 0.5rem;
   }
-
+  
   .dark {
     --background: 240 10% 10%; /* Dark gray instead of pure black */
     --foreground: 240 100% 99%;
-
+  
     --primary: 252 100% 60%;
     --primary-foreground: 240 100% 99%;
-
+  
     --secondary: 0 0% 0%; /* Black for dark mode */
     --secondary-foreground: 240 100% 99%;
-
+  
     --muted: 240 10% 20%; /* Dark gray muted */
     --muted-foreground: 240 5% 70%; /* Softer gray text */
-
+  
     --accent: 240 10% 25%; /* Dark gray accent */
     --accent-foreground: 240 100% 99%;
-
+  
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 240 100% 99%;
-
+  
     --border: 240 10% 25%; /* Darker gray border */
     --input: 240 10% 25%; /* Darker gray input */
     --ring: 252 100% 60%;
   }
-}
-
-@layer base {
+  
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground;
   }
@@ -65,9 +64,15 @@
 
 /* Custom animations */
 @keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 .animate-float {

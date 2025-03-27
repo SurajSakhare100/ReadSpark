@@ -27,7 +27,7 @@ export default function MarkdownPreview({ content, className = '' }: MarkdownPre
   };
 
   return (
-    <div className={`prose prose-sm md:prose-base lg:prose-lg dark:prose-invert max-w-none overflow-hidden max-h-[80vh] ${className}`}>
+    <div className={`prose prose-sm md:prose-base lg:prose-lg dark:prose-invert max-w-none overflow-scroll max-h-[80vh] ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}
@@ -63,7 +63,6 @@ export default function MarkdownPreview({ content, className = '' }: MarkdownPre
                   </button>
                 </div>
                 <div className="rounded-lg overflow-hidden">
-                  // Update the SyntaxHighlighter component style
                   <SyntaxHighlighter
                     style={oneDark}
                     language={match[1]}

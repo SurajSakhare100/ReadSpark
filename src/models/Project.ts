@@ -16,9 +16,9 @@ const projectSchema = new Schema<IProject>({
   docId: { type: String, required: true },
   title: { type: String, required: true },
   isGithubRepo: { type: Boolean, default: false },
-  repoUrl: { type: String },
+  repoUrl: { type: String ,required:false},
   visibility: { type: String }
-});
+}, { timestamps: true });
 
 export const Project = mongoose.models.Project || mongoose.model<IProject>('Project', projectSchema);
 

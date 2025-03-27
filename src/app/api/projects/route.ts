@@ -1,58 +1,49 @@
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
 import connectDB from '@/lib/db';
 import { Project } from '@/models/Project';
 import User from '@/models/User';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { authOptions } from '@/app/api/auth/[...nextauth]/config';
 
 export async function GET() {
   try {
-    const session = await getServerSession();
-
-    if (!session) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        {
-          status: 401,
-        }
-      );
+    // Get user session using authOptions
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Connect to the database
+    await connectDB();
+
+    // Fetch projects for the logged-in user
     const projects = await Project.find({ userId: session.user.id })
       .select('userId docId title isGithubRepo visibility repoUrl createdAt updatedAt')
       .sort({ updatedAt: -1 });
 
-    if (!projects) {
-      return NextResponse.json({ projects: [] });
-    }
-    return NextResponse.json({ projects });
-  } catch (error) {
+    return NextResponse.json({ projects }, { status: 200 });
+  } catch (error: unknown) {
     console.error('Error fetching projects:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession();
-
-    if (!session) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+    // Get user session using authOptions
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
+    // Connect to the database
     await connectDB();
 
+    // Check current project count for the user
     const projectCount = await Project.countDocuments({ userId: session.user.id });
     if (projectCount >= 5) {
-      return NextResponse.json(
-        { error: 'Project limit reached' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Project limit reached' }, { status: 403 });
     }
 
     const data = await request.json();
@@ -60,13 +51,10 @@ export async function POST(request: Request) {
 
     // Validate required fields
     if (!title || !description || !language || !type || !content) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Validate project type and GitHub repo
+    // Validate project type requirements
     if (type === 'github_readme' && !githubRepo) {
       return NextResponse.json(
         { error: 'GitHub repository is required for GitHub README projects' },
@@ -74,7 +62,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get or create user
+    // Get or create the user by username (assumes session.user.username is available)
     let user = await User.findOne({ username: session.user.username });
     if (!user) {
       user = await User.create({
@@ -83,14 +71,12 @@ export async function POST(request: Request) {
       });
     }
 
-    // Check project limit
+    // Check user's project count
     if (user.projectCount >= 5) {
-      return NextResponse.json(
-        { error: 'Maximum project limit (5) reached' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Maximum project limit (5) reached' }, { status: 403 });
     }
 
+    // Create the new project
     const project = await Project.create({
       userId: session.user.id,
       title,
@@ -99,18 +85,16 @@ export async function POST(request: Request) {
       type,
       content,
       githubRepo,
-      showBadge: type === 'github_readme'
+      showBadge: type === 'github_readme',
     });
 
     // Increment user's project count
     await User.findByIdAndUpdate(user._id, { $inc: { projectCount: 1 } });
 
     return NextResponse.json({ project }, { status: 201 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error creating project:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

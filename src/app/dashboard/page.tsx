@@ -8,16 +8,21 @@ import {
   Search, 
   FileText, 
   Calendar, 
-  MoreVertical,
   Edit3,
   Trash2,
   Download,
-  Loader2
+  Loader2,
+  Home,
+  Users,
+  Settings,
+  Star
 } from 'lucide-react';
 import { format } from 'date-fns';
 import GitHubProjectsDropdown from '@/components/GitHubProjectsDropdown';
-import MarkdownPreview from '@/components/MarkdownPreview';
 import { useRouter } from 'next/navigation';
+import { CircularProgress } from "@/components/ui/circular-progress";
+import { Card } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
 
 interface Document {
   _id: string;
@@ -33,11 +38,6 @@ interface Document {
   defaultBranch?: string;
 }
 
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { SiGithub } from 'react-icons/si';
-import GitHubRepoDropdown from '@/components/GitHubRepoDropdown';
-
 export default function DashboardPage() {
   const router = useRouter();
   const { data: session } = useSession();
@@ -45,15 +45,33 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [readmeContent, setReadmeContent] = useState<string>('');
+
+  const [projectStats, setProjectStats] = useState({
+    total: 0,
+    completed: 0,
+    inProgress: 0
+  });
+
+  const [projectCount, setProjectCount] = useState(0);
+  
+
+ 
 
   useEffect(() => {
     const fetchDocuments = async () => {
+      if (!session) return;
+      
       try {
         const response = await fetch('/api/documents');
         if (!response.ok) throw new Error('Failed to fetch documents');
         const data = await response.json();
+        
         setDocuments(data);
+        setProjectStats({
+          total: data.length,
+          completed: data.filter((doc: Document) => doc.content && doc.content.trim().length > 0).length,
+          inProgress: data.filter((doc: Document) => !doc.content || doc.content.trim().length === 0).length
+        });
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -61,9 +79,7 @@ export default function DashboardPage() {
       }
     };
 
-    if (session) {
-      fetchDocuments();
-    }
+    fetchDocuments();
   }, [session]);
 
   const filteredDocuments = documents.filter(doc =>
@@ -88,35 +104,30 @@ export default function DashboardPage() {
       setLoading(true);
       setError(null);
 
-      // Check if project already exists
       const existingDoc = documents.find(doc => 
-        'githubRepo' in doc && doc.githubRepo === `${owner}/${repo}`
+        doc.githubRepo === `${owner}/${repo}`
       );
 
       if (existingDoc) {
-        setError('This repository has already been imported');
+        setError('Repository already imported');
         return;
       }
 
-      // Fetch README content
       const readmeResponse = await fetch(`/api/github/readme?owner=${owner}&repo=${repo}`);
-      if (!readmeResponse.ok) {
-        throw new Error('Failed to fetch README');
-      }
-      const content = await readmeResponse.text();
+      if (!readmeResponse.ok) throw new Error('Failed to fetch README');
+      const {content} = await readmeResponse.json();
 
-      // Save to database
       const saveResponse = await fetch('/api/documents', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: repo,
-          content: content,
+          content,
           githubRepo: `${owner}/${repo}`,
           description: repoDetails.description || 'Imported from GitHub',
           languages: repoDetails.language ? [repoDetails.language] : [],
+          license:repoDetails.license || "MIT",
+          sections: repoDetails.sections || ['installation', 'usage', 'contributing'],
           repoUrl: repoDetails.html_url,
           visibility: repoDetails.visibility,
           lastUpdated: repoDetails.updated_at,
@@ -124,202 +135,204 @@ export default function DashboardPage() {
         })
       });
 
-      if (!saveResponse.ok) {
-        throw new Error('Failed to save document');
-      }
+      if (!saveResponse.ok) throw new Error('Failed to save document');
 
       const savedDoc = await saveResponse.json();
       setDocuments(prev => [...prev, savedDoc]);
       router.push(`/editor/${savedDoc._id}`);
 
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to import project');
+      setError(err instanceof Error ? err.message : 'Import failed');
     } finally {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    const fetchProjectCount = async () => {
+      if (!session) return;
+      try {
+        const response = await fetch('/api/user/count');
+        if (!response.ok) throw new Error('Failed to fetch project count');
+        const data = await response.json();
+        setProjectCount(data.count);
+      } catch (error) {
+        console.error('Error fetching project count:', error);
+      }
+    };
+
+    fetchProjectCount();
+  }, [session,handleDelete,handleSelectProject]);
 
   if (!session) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center space-y-4">
-          <h2 className="text-2xl font-bold">Please sign in to view your dashboard</h2>
-          <Link
-            href="/auth/signin"
-            className="inline-block px-6 py-3 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors"
-          >
-            Sign In
-          </Link>
-        </div>
+        <Card className="p-6">
+          <h2 className="text-2xl font-bold mb-4">Please sign in to continue</h2>
+          <Button asChild>
+            <Link href="/auth/signin">Sign In</Link>
+          </Button>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen">
-      <aside className="w-64 bg-white text-black p-4 flex flex-col justify-between border-r border-gray-800">
-        <div>
-          <h2 className="text-xl font-bold mb-4">Dashboard</h2>
-          <ul className="space-y-2">
-            <li><Link href="/" className="block py-2 px-4 rounded hover:bg-gray-700">All Files</Link></li>
-            <li><Link href="/team-folders" className="block py-2 px-4 rounded hover:bg-gray-700">Team Folders</Link></li>
-            <li><Link href="/upgrade" className="block py-2 px-4 rounded hover:bg-gray-700">Upgrade</Link></li>
-          </ul>
-        </div>
-        <div className="mt-auto">
-          <h3 className="font-semibold mb-2">Recent Projects</h3>
-          <ul className="space-y-1">
-            {documents.slice(0, 5).map(doc => (
-              <li key={doc._id}>
-                <Link 
-                  href={`/editor/${doc._id}`}
-                  className="block py-1 px-2 text-sm rounded hover:bg-gray-700 truncate"
-                >
-                  {doc.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
+    <div className="flex h-screen bg-gray-50">
+      <aside className="w-64 bg-white shadow-lg">
+        <div className="h-full flex flex-col p-4">
+          <div className="space-y-6">
+            
+
+            <nav className="space-y-1">
+              <Link href="/" className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100">
+                <Home className="h-5 w-5" />
+                <span>Dashboard</span>
+              </Link>
+              <Link href="/team" className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100">
+                <Users className="h-5 w-5" />
+                <span>Team</span>
+              </Link>
+              <Link href="/settings" className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100">
+                <Settings className="h-5 w-5" />
+                <span>Settings</span>
+              </Link>
+            </nav>
+          </div>
+
+          <div className="mt-auto">
+            
+            <div className="flex items-center space-x-3 justify-center">
+              <CircularProgress value={(projectCount ) } />
+              
+            </div>
+          </div>
         </div>
       </aside>
-      <main className="flex-1 container mx-auto px-4 py-8 bg-white text-black">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Your Projects</h1>
-            <p className="text-gray-400 mt-1">
-              Manage and organize your documentation projects
-            </p>
-          </div>
-          <Button asChild>
-            <Link href="/create">
-              <Plus className="h-4 w-4" />
-              New Project
-            </Link>
-          </Button>
-        </div>
 
-        <div className="mb-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search projects..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-background border rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-6">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold">Dashboard</h1>
-            <GitHubProjectsDropdown onSelectProject={handleSelectProject} />
+      <main className="flex-1 overflow-auto">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="text-3xl font-bold">Your Projects</h1>
+              <p className="text-gray-500">Manage your documentation</p>
+            </div>
+            <div className="flex items-center space-x-4">
+              <GitHubProjectsDropdown onSelectProject={handleSelectProject} />
+              <Button asChild>
+                <Link href="/create">
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Project
+                </Link>
+              </Button>
+            </div>
           </div>
 
-         
+          <div className="mb-6">
+            <div className="relative max-w-xl">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search projects..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
           </div>
 
-        {loading ? (
-          <div className="flex items-center justify-center min-h-[200px]">
-            <Loader2 className="h-8 w-8 animate-spin text-white" />
-          </div>
-        ) : error ? (
-          <div className="bg-red-500 text-white p-4 rounded-lg">
-            {error}
-          </div>
-        ) : filteredDocuments.length === 0 ? (
-          <div className="text-center py-12 border-2 border-dashed border-gray-600 rounded-lg">
-            <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No projects found</h3>
-            <p className="text-gray-400 mb-4">
-              {searchQuery
-                ? "No projects match your search"
-                : "Start by creating your first project"}
-            </p>
-            {!searchQuery && (
-              <Link
-                href="/create"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors"
-              >
-                <Plus className="h-4 w-4" />
-                Create Project
-              </Link>
-            )}
-          </div>
-        ) : (
-          <div className="grid gap-4">
-            {filteredDocuments.map((doc) => (
-              <Link
-                href={`/editor/${doc._id}`}
-                key={doc._id}
-                className="block"
-              >
-                <div className="flex items-center justify-between p-4 border border-gray-600 rounded-lg bg-white hover:border-black transition-colors group">
-                  <div className="flex items-start gap-4 flex-1">
-                    <div className="p-2 bg-white rounded">
-                      <FileText className="h-6 w-6 text-black" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-black truncate">{doc.title}</h3>
-                      <p className="text-sm text-gray-600 line-clamp-1">
-                        {doc.description}
-                      </p>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-gray-00">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          {format(new Date(doc.updatedAt), 'MMM d, yyyy')}
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            </div>
+          ) : error ? (
+            <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg">
+              {error}
+            </div>
+          ) : filteredDocuments.length === 0 ? (
+            <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-lg">
+              <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+              <h3 className="text-lg font-medium mb-2">No projects found</h3>
+              <p className="text-gray-500 mb-4">
+                {searchQuery ? "No projects match your search" : "Start by creating your first project"}
+              </p>
+              {!searchQuery && (
+                <Button asChild>
+                  <Link href="/create">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Project
+                  </Link>
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="grid gap-4">
+              {filteredDocuments.map((doc) => (
+                <Card key={doc._id} className="hover:shadow-md transition-shadow">
+                  <Link href={`/editor/${doc._id}`}>
+                    <div className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-start space-x-4">
+                          <div className="p-2 bg-gray-50 rounded">
+                            <FileText className="h-6 w-6 text-gray-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-medium">{doc.title}</h3>
+                            <p className="text-sm text-gray-500 line-clamp-1">{doc.description}</p>
+                            <div className="flex items-center space-x-4 mt-2">
+                              <div className="flex items-center text-sm text-gray-500">
+                                <Calendar className="h-4 w-4 mr-1" />
+                                {format(new Date(doc.updatedAt), 'MMM d, yyyy')}
+                              </div>
+                              <div className="flex gap-1">
+                                {doc.languages?.map((lang) => (
+                                  <span key={lang} className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
+                                    {lang}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex gap-1">
-                          {doc.languages?.map((lang:string) => (
-                            <span
-                              key={lang}
-                              className="px-2 py-0.5 bg-white text-black rounded text-xs"
-                            >
-                              {lang}
-                            </span>
-                          ))}
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push(`/editor/${doc._id}`);
+                            }}
+                          >
+                            <Edit3 className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleDelete(doc._id);
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              // TODO: Implement download
+                            }}
+                          >
+                            <Download className="h-4 w-4" />
+                          </Button>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2 ">
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.location.href = `/editor/${doc._id}`;
-                      }}
-                      className="p-2 hover:bg-gray-700 rounded-md transition-colors"
-                      title="Edit"
-                    >
-                      <Edit3 className="h-4 w-4 text-white" />
-                    </Button>
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleDelete(doc._id);
-                      }}
-                      className="p-2 hover:bg-red-500 hover:text-white rounded-md transition-colors"
-                      title="Delete"
-                    >
-                      <Trash2 className="h-4 w-4 text-white" />
-                    </Button>
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        // Implement download functionality
-                      }}
-                      className="p-2 hover:bg-gray-700 rounded-md transition-colors"
-                      title="Download"
-                    >
-                      <Download className="h-4 w-4 text-white" />
-                    </Button>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+                  </Link>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { Editor as MonacoEditor } from '@monaco-editor/react';
 import ReactMarkdown from 'react-markdown';
@@ -15,14 +17,14 @@ export default function Editor({ initialContent = '', onChange }: EditorProps) {
   }, [initialContent]);
 
   const handleEditorChange = (value: string | undefined) => {
-    const newContent = value || '';
+    const newContent = value ?? '';
     setContent(newContent);
     onChange?.(newContent);
   };
 
   return (
     <div className="grid grid-cols-2 gap-4 h-[calc(100vh-200px)]">
-      <div className="border rounded-lg overflow-hidden">
+      <div className="border rounded-lg overflow-scroll">
         <MonacoEditor
           height="100%"
           defaultLanguage="markdown"
@@ -37,9 +39,9 @@ export default function Editor({ initialContent = '', onChange }: EditorProps) {
           }}
         />
       </div>
-      <div className="border rounded-lg p-4 overflow-auto prose dark:prose-invert max-w-none">
+      <div className="border rounded-lg p-4 overflow-scroll dark:prose-invert max-w-none">
         <ReactMarkdown>{content}</ReactMarkdown>
       </div>
     </div>
   );
-} 
+}

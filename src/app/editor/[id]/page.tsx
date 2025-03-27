@@ -1,20 +1,16 @@
 'use client';
-
+import React from 'react';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Loader2, Save, Wand2, Github } from 'lucide-react';
 import MarkdownPreview from '@/components/MarkdownPreview';
 import { generateMarkdown } from '@/lib/gemini';
 import { toast } from 'react-hot-toast';
 
 interface EditorPageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
 export default function EditorPage({ params }: EditorPageProps) {
-  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editableContent, setEditableContent] = useState('');
@@ -22,19 +18,21 @@ export default function EditorPage({ params }: EditorPageProps) {
   const [isPushing, setIsPushing] = useState(false);
   const [pushError, setPushError] = useState<string | null>(null);
 
+  const resolvedParams = React.use(params);
+  const id = resolvedParams.id;
+
   useEffect(() => {
     const fetchDocument = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/documents/${params.id}`);
+        const response = await fetch(`/api/documents/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch document');
         }
 
         const data = await response.json();
-        console.log('data', data);
         setDocumentData(data);
         setEditableContent(data.content);
       } catch (error: any) {
@@ -45,10 +43,10 @@ export default function EditorPage({ params }: EditorPageProps) {
       }
     };
 
-    if (params.id) {
+    if (id) {
       fetchDocument();
     }
-  }, [params.id]);
+  }, [id]);
 
   const handleRegenerate = async () => {
     try {
@@ -68,7 +66,7 @@ export default function EditorPage({ params }: EditorPageProps) {
       setEditableContent(content);
 
       // Save the regenerated content
-      const response = await fetch(`/api/documents/${params.id}`, {
+      const response = await fetch(`/api/documents/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -82,6 +80,8 @@ export default function EditorPage({ params }: EditorPageProps) {
       if (!response.ok) {
         throw new Error('Failed to save regenerated content');
       }
+
+      setDocumentData((prev: any) => ({ ...prev, content }));
     } catch (error: any) {
       console.error('Error regenerating markdown:', error);
       setError(error.message || 'Failed to regenerate markdown');
@@ -95,7 +95,7 @@ export default function EditorPage({ params }: EditorPageProps) {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/documents/${params.id}`, {
+      const response = await fetch(`/api/documents/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -110,7 +110,8 @@ export default function EditorPage({ params }: EditorPageProps) {
         throw new Error('Failed to save document');
       }
 
-      // Optionally show success message
+      setDocumentData((prev: any) => ({ ...prev, content: editableContent }));
+      toast.success('Document saved successfully!');
     } catch (error: any) {
       console.error('Error saving document:', error);
       setError(error.message || 'Failed to save document');
@@ -126,7 +127,7 @@ export default function EditorPage({ params }: EditorPageProps) {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/documents/${params.id}`, {
+        const response = await fetch(`/api/documents/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -142,6 +143,7 @@ export default function EditorPage({ params }: EditorPageProps) {
         }
 
         setDocumentData((prevData: any) => ({ ...prevData, title: newTitle }));
+        toast.success('Project renamed successfully!');
       } catch (error: any) {
         console.error('Error renaming project:', error);
         setError(error.message || 'Failed to rename project');
@@ -156,23 +158,25 @@ export default function EditorPage({ params }: EditorPageProps) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${documentData.title || 'project'}.md`;
+    a.download = `${documentData?.title || 'project'}.md`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
   const handlePushToGithub = async () => {
-    // if (!documentData?.githubRepo) return;
-    // console.log('documentData', documentData);
+    // Only proceed if we have githubRepo and username defined in documentData
+    if (!documentData?.githubRepo || !documentData?.username) return;
     
     try {
       setIsPushing(true);
       setPushError(null);
       
-      // const [owner, repo] = documentData.githubRepo.split('/');
+      // Use documentData.username as owner and documentData.githubRepo as repository name
+      const owner = documentData.username;
+      const repo = documentData.githubRepo;
       
-      // Get current README SHA
-      const readmeResponse = await fetch(`https://api.github.com/repos/SurajSakhare100/tripAi/contents/README.md`);
+      // Get current README SHA dynamically
+      const readmeResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/README.md`);
       const readmeData = await readmeResponse.json();
       
       const response = await fetch('/api/github/push', {
@@ -181,20 +185,20 @@ export default function EditorPage({ params }: EditorPageProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          owner:"SurajSakhare100",
-          repo:"tripAi",
+          owner,
+          repo,
           content: documentData.content,
           sha: readmeData.sha,
         }),
       });
 
       if (!response.ok) {
-        const error = await response.text();
-        throw new Error(error);
+        const errorText = await response.text();
+        throw new Error(errorText);
       }
 
       toast.success('Successfully pushed to GitHub!');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error pushing to GitHub:', error);
       setPushError(error instanceof Error ? error.message : 'Failed to push to GitHub');
       toast.error('Failed to push to GitHub');
@@ -220,14 +224,14 @@ export default function EditorPage({ params }: EditorPageProps) {
       </div>
     );
   }
-  console.log('documentData', documentData);
+
   return (
-    <div className="container mx-auto p-4 flex flex-col items-center">
-      <div className="w-full max-w-6xl">
+    <div className=" mx-auto p-4 flex flex-col items-center">
+      <div className="w-full max-w-7xl">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold">{documentData?.title}</h1>
-            {/* {documentData?.githubRepo && ( */}
+            {documentData?.githubRepo && documentData?.username && (
               <button
                 onClick={handlePushToGithub}
                 disabled={isPushing}
@@ -236,7 +240,7 @@ export default function EditorPage({ params }: EditorPageProps) {
                 <Github className="h-4 w-4" />
                 {isPushing ? 'Pushing...' : 'Push to GitHub'}
               </button>
-            {/* )} */}
+            )}
           </div>
           <div className="flex gap-2">
             <button
@@ -297,4 +301,4 @@ export default function EditorPage({ params }: EditorPageProps) {
       </div>
     </div>
   );
-} 
+}

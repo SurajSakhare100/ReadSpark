@@ -11,8 +11,8 @@ import { Footer } from '@/components/footer';
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-950 to-slate-900">
-      <Navbar/>
-      <Hero/>
+      <Navbar />
+      <Hero />
       <Features />
       <Screenshots />
       <Workflow />
