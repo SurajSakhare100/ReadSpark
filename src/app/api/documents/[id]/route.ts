@@ -5,15 +5,9 @@ import Document from '@/models/Document';
 import { authOptions } from '@/app/api/auth/[...nextauth]/config';
 import User from '@/models/User';
 
-// Define TypeScript type for route parameters.
-interface RouteParams {
-  params: { id?: string };
-}
 
-
-// ✅ GET: Fetch a single document by ID.
 export async function GET(req: NextRequest, 
-  { params }: { params: { id?: string } }) {
+  { params }: { params: { id: string } }) {
   try {
     const { id } =await params;
     const session = await getServerSession(authOptions);
@@ -42,8 +36,7 @@ export async function GET(req: NextRequest,
   }
 }
 
-// ✅ PUT: Update a document by ID.
-export async function PUT(req: NextRequest, { params }: RouteParams) {
+export async function PUT(req: NextRequest,  { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
     const session = await getServerSession(authOptions);
@@ -99,8 +92,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
   }
 }
 
-// ✅ DELETE: Remove a document by ID.
-export async function DELETE(req: NextRequest, { params }: RouteParams) {
+export async function DELETE(req: NextRequest,  { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
     const session = await getServerSession(authOptions);
