@@ -12,7 +12,8 @@ interface RouteParams {
 
 
 // ✅ GET: Fetch a single document by ID.
-export async function GET(req: NextRequest, { params }: RouteParams) {
+export async function GET(req: NextRequest, 
+  { params }: { params: { id?: string } }) {
   try {
     const { id } =await params;
     const session = await getServerSession(authOptions);
