@@ -5,25 +5,23 @@ import Document from '@/models/Document';
 import { authOptions } from '@/app/api/auth/[...nextauth]/config';
 import User from '@/models/User';
 
-
-export async function GET(req: NextRequest, 
-  { params }: { params: { id: string } }) {
+// GET method to fetch a document by ID
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const  id  =await params.id;
+    const { id } = params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-
     await connectDB();
-    const userId = session.user.id; // Get the user ID from the session.
+    const userId = session.user.id;
 
-    const document = await Document.findOne({
-      _id: id,
-      userId: userId,
-    });
+    const document = await Document.findOne({ _id: id, userId });
 
     if (!document) {
       return NextResponse.json({ error: 'Document not found' }, { status: 404 });
@@ -36,9 +34,13 @@ export async function GET(req: NextRequest,
   }
 }
 
-export async function PUT(req: NextRequest,  { params }: { params: { id: string } }) {
+// PUT method to update a document by ID
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const { id } = await params;
+    const { id } = params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -46,12 +48,9 @@ export async function PUT(req: NextRequest,  { params }: { params: { id: string 
     }
 
     await connectDB();
-    const userId = session.user.id; // Get the user ID from the session.
+    const userId = session.user.id;
 
-    const existingDoc = await Document.findOne({
-      _id: id,
-      userId: userId,
-    });
+    const existingDoc = await Document.findOne({ _id: id, userId });
 
     if (!existingDoc) {
       return NextResponse.json({ error: 'Document not found' }, { status: 404 });
@@ -60,7 +59,6 @@ export async function PUT(req: NextRequest,  { params }: { params: { id: string 
     const body = await req.json();
     const { title, description, languages, license, sections, content } = body;
 
-    // Validate required fields.
     if (
       !title ||
       !Array.isArray(languages) ||
@@ -92,25 +90,23 @@ export async function PUT(req: NextRequest,  { params }: { params: { id: string 
   }
 }
 
-export async function DELETE(req: NextRequest,  { params }: { params: { id: string } }) {
+// DELETE method to delete a document by ID
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const { id } = await params;
+    const { id } = params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-   
-
     await connectDB();
-    const userId = session.user.id; // Get the user ID from the session.
+    const userId = session.user.id;
 
-
-    const document = await Document.findOne({
-      _id: id,
-      userId:userId,
-    });
+    const document = await Document.findOne({ _id: id, userId });
 
     if (!document) {
       return NextResponse.json({ error: 'Document not found' }, { status: 404 });
@@ -118,7 +114,7 @@ export async function DELETE(req: NextRequest,  { params }: { params: { id: stri
 
     await Document.deleteOne({ _id: id });
     await User.findOneAndUpdate(
-      { userId: userId },
+      { _id: userId },
       { $inc: { projectCount: -1 } },
       { new: true }
     );
