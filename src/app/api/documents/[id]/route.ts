@@ -9,7 +9,7 @@ import User from '@/models/User';
 export async function GET(req: NextRequest, 
   { params }: { params: { id: string } }) {
   try {
-    const { id } =await params;
+    const  id  =await params.id;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
