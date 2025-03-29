@@ -3,12 +3,11 @@ import { getServerSession } from 'next-auth';
 import connectDB from '@/lib/db';
 import Document from '@/models/Document';
 import { authOptions } from '@/app/api/auth/[...nextauth]/config';
-import mongoose from 'mongoose';
 import User from '@/models/User';
 
 // Define TypeScript type for route parameters.
 interface RouteParams {
-  params: { id: string };
+  params: { id?: string };
 }
 
 
