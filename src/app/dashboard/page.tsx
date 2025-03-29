@@ -23,6 +23,9 @@ import { useRouter } from 'next/navigation';
 import { CircularProgress } from "@/components/ui/circular-progress";
 import { Card } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
+import DashboardNav from '@/components/DashboardNav';
+import SettingsPage from '@/components/Settings';
+import Image from 'next/image';
 
 interface Document {
   _id: string;
@@ -51,6 +54,7 @@ export default function DashboardPage() {
     completed: 0,
     inProgress: 0
   });
+  const [activeTab, setActiveTab] = useState<'projects' | 'settings'>('projects');
 
   const [projectCount, setProjectCount] = useState(0);
   
@@ -123,10 +127,11 @@ export default function DashboardPage() {
         body: JSON.stringify({
           title: repo,
           content,
-          githubRepo: `${owner}/${repo}`,
+          githubRepo: `${repo}`,
           description: repoDetails.description || 'Imported from GitHub',
           languages: repoDetails.language ? [repoDetails.language] : [],
           license:repoDetails.license || "MIT",
+          integrationType: 'github',
           sections: repoDetails.sections || ['installation', 'usage', 'contributing'],
           repoUrl: repoDetails.html_url,
           visibility: repoDetails.visibility,
@@ -163,53 +168,60 @@ export default function DashboardPage() {
     fetchProjectCount();
   }, [session,handleDelete,handleSelectProject]);
 
-  if (!session) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Card className="p-6">
-          <h2 className="text-2xl font-bold mb-4">Please sign in to continue</h2>
-          <Button asChild>
-            <Link href="/auth/signin">Sign In</Link>
-          </Button>
-        </Card>
-      </div>
-    );
-  }
+
+  const renderSettingsTab = () => {
+    return <SettingsPage />;
+  };
+
+ 
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <aside className="w-64 bg-white shadow-lg">
+    <div className="flex h-screen ">
+   
+      <aside className="w-64  shadow-lg dark:border-r">
         <div className="h-full flex flex-col p-4">
-          <div className="space-y-6">
-            
+          <nav className="space-y-1 ">
+          <Link href="/"
+                className={`w-full flex items-center space-x-1 px-3 rounded-lg cursor-pointer mb-6`}
+              >
+                        <Image src={require('../../../assests/logo.png')} alt="Logo" width={40} height={40} />  
 
-            <nav className="space-y-1">
-              <Link href="/" className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100">
+                <span>ReadSpark</span>
+              </Link>
+
+              <div
+                onClick={() => setActiveTab('projects')}
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg  cursor-pointer ${
+                  activeTab === 'projects' ? 'bg-blue-700  text-white' : ''
+                }`}
+              >
                 <Home className="h-5 w-5" />
-                <span>Dashboard</span>
-              </Link>
-              <Link href="/team" className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100">
-                <Users className="h-5 w-5" />
-                <span>Team</span>
-              </Link>
-              <Link href="/settings" className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100">
+                <span>Projects</span>
+              </div>
+              <div
+                onClick={() => setActiveTab('settings')}
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg cursor-pointer  ${
+                  activeTab === 'settings' ? 'bg-blue-700 text-white' : ''
+                }`}
+              >
                 <Settings className="h-5 w-5" />
                 <span>Settings</span>
-              </Link>
+              </div>
             </nav>
-          </div>
 
-          <div className="mt-auto">
+          <div className="mt-auto flex items-center justify-center w-full">
             
-            <div className="flex items-center space-x-3 justify-center">
+            <div className="flex-1  items-center w-full space-y-3 justify-center">
+              <h1 className='text-lg'>Project count :</h1>
               <CircularProgress value={(projectCount ) } />
               
             </div>
           </div>
         </div>
       </aside>
-
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto ">
+        {activeTab == 'projects' ? <div >
+      <DashboardNav />
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex justify-between items-center mb-8">
             <div>
@@ -272,12 +284,12 @@ export default function DashboardPage() {
                     <div className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-start space-x-4">
-                          <div className="p-2 bg-gray-50 rounded">
-                            <FileText className="h-6 w-6 text-gray-600" />
+                          <div className="p-2 rounded">
+                            <FileText className="h-6 w-6 " />
                           </div>
                           <div>
-                            <h3 className="font-medium">{doc.title}</h3>
-                            <p className="text-sm text-gray-500 line-clamp-1">{doc.description}</p>
+                            <h3 className="font-medium ">{doc.title}</h3>
+                            <p className="text-sm text-gray-500 line-clamp-1 ">{doc.description}</p>
                             <div className="flex items-center space-x-4 mt-2">
                               <div className="flex items-center text-sm text-gray-500">
                                 <Calendar className="h-4 w-4 mr-1" />
@@ -333,7 +345,10 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
+      </div>: renderSettingsTab()}
       </main>
+
+      
     </div>
   );
 }

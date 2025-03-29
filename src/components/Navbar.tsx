@@ -10,35 +10,57 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { ThemeToggle } from './theme-toggle';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default function Navbar() {
+  const { data: session } = useSession(); // Get session data
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 py-1 mt-2">
-      <div className="container flex h-16 items-center  bg-white rounded-full shadow-md">
+      <div className="container flex h-16 items-center rounded-full shadow-md border dark:border-opacity-50  dark:border-white">
         {/* Logo and Brand */}
         <Link href="/" className="flex items-center space-x-2">
           <div className="w-8 h-8">
             <FileText className="w-full h-full text-primary" />
           </div>
-          <span className="text-xl font-semibold">
-            ReadSpark
-          </span>
+          <span className="text-xl font-semibold">ReadSpark</span>
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6 ml-auto">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="text-lg font-medium text-primary hover:text-primary/80"
           >
             Landing
           </Link>
-          <Link 
-            href="/create" 
+          <Link
+            href="/create"
             className="text-lg font-medium text-muted-foreground hover:text-foreground"
           >
-            Readme Generator
+            Create Readme
           </Link>
+
+          {session?.user ? (
+            <>
+              {/* Show Dashboard if user is signed in */}
+              <Link
+                href="/dashboard"
+                className="text-lg font-medium text-muted-foreground hover:text-foreground"
+              >
+                Dashboard
+              </Link>
+            </>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => signIn('github')}
+            >
+              Sign In
+            </Button>
+          )}
+
           <ThemeToggle />
         </div>
 
@@ -50,8 +72,8 @@ export default function Navbar() {
                 <Menu className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent 
-              align="end" 
+            <DropdownMenuContent
+              align="end"
               className="w-[360px] p-4 bg-background/95 backdrop-blur-sm"
             >
               <DropdownMenuItem asChild className="py-3 px-4 focus:bg-accent">
@@ -60,10 +82,36 @@ export default function Navbar() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="py-3 px-4 focus:bg-accent">
-                <Link href="/generator" className="w-full text-xl font-medium">
-                  Readme Generator
+                <Link href="/create" className="w-full text-xl font-medium">
+                  Create Readme
                 </Link>
               </DropdownMenuItem>
+              {session?.user ? (
+                <>
+                  <DropdownMenuItem asChild className="py-3 px-4 focus:bg-accent">
+                    <Link href="/dashboard" className="w-full text-xl font-medium">
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="py-3 px-4 focus:bg-accent">
+                    <button
+                      onClick={() => signOut({ callbackUrl: '/' })}
+                      className="w-full text-xl font-medium text-left"
+                    >
+                      Sign Out
+                    </button>
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <DropdownMenuItem asChild className="py-3 px-4 focus:bg-accent">
+                  <button
+                    onClick={() => signIn('github')}
+                    className="w-full text-xl font-medium text-left"
+                  >
+                    Sign In
+                  </button>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

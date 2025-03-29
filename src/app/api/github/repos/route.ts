@@ -20,6 +20,7 @@ export async function GET() {
       }
     );
 
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`GitHub API Error: ${errorText}`);

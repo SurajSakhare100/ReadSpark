@@ -1,10 +1,13 @@
 'use client';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Loader2, Save, Wand2, Github } from 'lucide-react';
+import { Loader2, Save, Wand2, Github, MoveLeft, ArrowLeft } from 'lucide-react';
 import MarkdownPreview from '@/components/MarkdownPreview';
 import { generateMarkdown } from '@/lib/gemini';
 import { toast } from 'react-hot-toast';
+import { Button } from '@/components/ui/button';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface EditorPageProps {
   params: Promise<{ id: string }>;
@@ -20,7 +23,8 @@ export default function EditorPage({ params }: EditorPageProps) {
 
   const resolvedParams = React.use(params);
   const id = resolvedParams.id;
-
+  const router = useRouter();
+  const {data:session}=useSession();
   useEffect(() => {
     const fetchDocument = async () => {
       try {
@@ -164,15 +168,13 @@ export default function EditorPage({ params }: EditorPageProps) {
   };
 
   const handlePushToGithub = async () => {
-    // Only proceed if we have githubRepo and username defined in documentData
-    if (!documentData?.githubRepo || !documentData?.username) return;
+    if (!documentData?.githubRepo ) return;
     
     try {
       setIsPushing(true);
       setPushError(null);
       
-      // Use documentData.username as owner and documentData.githubRepo as repository name
-      const owner = documentData.username;
+      const owner = session?.user?.username;
       const repo = documentData.githubRepo;
       
       // Get current README SHA dynamically
@@ -206,6 +208,9 @@ export default function EditorPage({ params }: EditorPageProps) {
       setIsPushing(false);
     }
   };
+  const handleBack = () => {
+    router.push('/dashboard');
+  };
 
   if (loading) {
     return (
@@ -228,18 +233,25 @@ export default function EditorPage({ params }: EditorPageProps) {
   return (
     <div className=" mx-auto p-4 flex flex-col items-center">
       <div className="w-full max-w-7xl">
+      <Button
+              onClick={handleBack}
+              className="flex items-center gap-2 px-4 py-2 mb-6 bg-gray-200 text-secondary-foreground rounded-lg hover:bg-secondary/90 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Dashboard
+            </Button>
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold">{documentData?.title}</h1>
-            {documentData?.githubRepo && documentData?.username && (
-              <button
+            {documentData?.integrationType=="github" && documentData?.userId && (
+              <Button
                 onClick={handlePushToGithub}
                 disabled={isPushing}
                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Github className="h-4 w-4" />
                 {isPushing ? 'Pushing...' : 'Push to GitHub'}
-              </button>
+              </Button>
             )}
           </div>
           <div className="flex gap-2">

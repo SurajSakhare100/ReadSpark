@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import connectDB from '@/lib/db';
-import User from '@/models/User';
+import User, { createOrUpdateUser } from '@/models/User'; // Import the helper function
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_SECRET!,
       authorization: {
         params: {
-          scope: 'read:user user:email repo write:repo_hook',// Read/Write Permissions
+          scope: 'read:user user:email repo write:repo_hook', // Read/Write Permissions
         },
       },
       profile(profile, tokens) {
@@ -34,21 +34,17 @@ export const authOptions: NextAuthOptions = {
         // Connect to the database.
         await connectDB();
 
-        // Check if the user already exists in your database.
-        const existingUser = await User.findOne({ username: user.username });
+        // Use the helper function to create or update the user.
+        await createOrUpdateUser({
+          userId: profile?.id.toString() || '',
+          username: profile?.login || '',
+          accessToken: account?.access_token || '',
+          image: profile?.avatar_url || '',
+        });
 
-        if (!existingUser) {
-          // Create a new user record with initial projectCount.
-          await User.create({
-            username: user.username,
-            projectCount: 0,
-            accessToken: account?.access_token || '',
-            image:user.image
-          });
-        }
         return true;
       } catch (error) {
-        console.error("Error during sign-in callback:", error);
+        console.error('Error during sign-in callback:', error);
         return false;
       }
     },
@@ -71,4 +67,5 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
 };

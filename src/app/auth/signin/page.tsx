@@ -7,8 +7,8 @@ export default function SignIn() {
   return (
     <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center">
       <div className="w-full max-w-md space-y-8 px-4 text-center">
-        <h2 className="text-3xl font-bold">Welcome to ReadSpark</h2>
-        <p className="text-sm text-muted-foreground">
+        <h2 className="text-4xl font-bold">Welcome to ReadSpark</h2>
+        <p className="text-md text-muted-foreground">
           Sign in to start creating beautiful documentation.
         </p>
         <button

@@ -60,10 +60,9 @@ export async function POST(request: Request) {
 
     const data = await response.json();
     return NextResponse.json({ success: true, data });
-    
   } catch (error: unknown) {
     console.error('Error pushing to GitHub:', error);
-    
+
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal Server Error' },
       { status: 500 }

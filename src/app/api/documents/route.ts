@@ -4,6 +4,7 @@ import connectDB from '@/lib/db';
 import Document from '@/models/Document';
 import User from '@/models/User';
 import { authOptions } from '@/app/api/auth/[...nextauth]/config';
+import mongoose from 'mongoose';
 
 // Define TypeScript types for body content
 interface DocumentBody {
@@ -15,7 +16,6 @@ interface DocumentBody {
   content: string;
   githubRepo?: string;
 }
-
 // POST: Create a new document
 export async function POST(req: Request) {
   try {
@@ -37,10 +37,10 @@ export async function POST(req: Request) {
     }
 
     await connectDB();
-
+    const userId = session.user.id;
     // Create a new document
     const document = await Document.create({
-      username: session.user.username,
+      userId: userId,
       title,
       description,
       languages,
@@ -53,12 +53,11 @@ export async function POST(req: Request) {
     });
 
     // Increment the user's project count
-    const user=await User.findByIdAndUpdate(
-      { username: session.user.username },
+    const user=await User.findOneAndUpdate(
+      { userId: userId},
       { $inc: { projectCount: 1 } }, 
-      { new: true } // Returns the updated document
+      { new: true } 
     );
-    console.log(user)
     return NextResponse.json(document, { status: 201 });
   } catch (error: any) {
     console.error('Error saving document:', error.message || error);
@@ -76,9 +75,8 @@ export async function GET() {
     }
 
     await connectDB();
-
-    // Fetch documents for the user
-    const documents = await Document.find({ username: session.user.username })
+    const userId = session.user.id;
+    const documents = await Document.find({ userId: userId })
       .sort({ updatedAt: -1 })
       .select('title description githubRepo updatedAt');
 

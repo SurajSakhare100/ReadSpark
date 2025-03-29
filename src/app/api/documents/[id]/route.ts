@@ -11,27 +11,24 @@ interface RouteParams {
   params: { id: string };
 }
 
-// Helper function to validate MongoDB ObjectId.
-const isValidObjectId = (id: string) => mongoose.Types.ObjectId.isValid(id);
 
 // ✅ GET: Fetch a single document by ID.
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
-    const { id } = await params; // Await the params promise and destructure id.
+    const { id } =await params;
     const session = await getServerSession(authOptions);
+
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (!isValidObjectId(id)) {
-      return NextResponse.json({ error: 'Invalid document ID' }, { status: 400 });
-    }
 
     await connectDB();
+    const userId = session.user.id; // Get the user ID from the session.
 
     const document = await Document.findOne({
       _id: id,
-      username: session.user.username,
+      userId: userId,
     });
 
     if (!document) {
@@ -48,21 +45,19 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 // ✅ PUT: Update a document by ID.
 export async function PUT(req: NextRequest, { params }: RouteParams) {
   try {
-    const { id } = await params; // Await the params promise and destructure id.
+    const { id } = await params;
     const session = await getServerSession(authOptions);
+
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (!isValidObjectId(id)) {
-      return NextResponse.json({ error: 'Invalid document ID' }, { status: 400 });
-    }
-
     await connectDB();
+    const userId = session.user.id; // Get the user ID from the session.
 
     const existingDoc = await Document.findOne({
       _id: id,
-      username: session.user.username,
+      userId: userId,
     });
 
     if (!existingDoc) {
@@ -107,21 +102,22 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 // ✅ DELETE: Remove a document by ID.
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
-    const { id } = await params; // Await the params promise and destructure id.
+    const { id } = await params;
     const session = await getServerSession(authOptions);
+
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (!isValidObjectId(id)) {
-      return NextResponse.json({ error: 'Invalid document ID' }, { status: 400 });
-    }
+   
 
     await connectDB();
+    const userId = session.user.id; // Get the user ID from the session.
+
 
     const document = await Document.findOne({
       _id: id,
-      username: session.user.username,
+      userId:userId,
     });
 
     if (!document) {
@@ -130,10 +126,11 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
 
     await Document.deleteOne({ _id: id });
     await User.findOneAndUpdate(
-      { username: session.user.username },
+      { userId: userId },
       { $inc: { projectCount: -1 } },
       { new: true }
     );
+
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error: any) {
     console.error('Error deleting document:', error.message || error);

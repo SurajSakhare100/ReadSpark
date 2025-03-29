@@ -28,27 +28,27 @@ const availableLanguages = [
 ];
 
 const licenses = [
-  { 
-    id: 'mit', 
-    name: 'MIT License', 
+  {
+    id: 'mit',
+    name: 'MIT License',
     description: 'Simple and permissive',
     icon: '🔓'
   },
-  { 
-    id: 'apache', 
-    name: 'Apache 2.0', 
+  {
+    id: 'apache',
+    name: 'Apache 2.0',
     description: 'Patent protection included',
     icon: '⚖️'
   },
-  { 
-    id: 'gpl', 
-    name: 'GNU GPL v3', 
+  {
+    id: 'gpl',
+    name: 'GNU GPL v3',
     description: 'Copyleft license',
     icon: '🔄'
   },
-  { 
-    id: 'bsd', 
-    name: 'BSD 3-Clause', 
+  {
+    id: 'bsd',
+    name: 'BSD 3-Clause',
     description: 'Business-friendly',
     icon: '💼'
   },
@@ -149,55 +149,52 @@ ${formData.description || ''}
 
 ## Technologies Used
 ${formData.languages
-  .map(lang => {
-    const found = availableLanguages.find(l => l.id === lang);
-    return `- ${found ? found.name : lang}`;
-  })
-  .join('\n')}
+        .map(lang => {
+          const found = availableLanguages.find(l => l.id === lang);
+          return `- ${found ? found.name : lang}`;
+        })
+        .join('\n')}
 
 ## License
-${licenses.find(l => l.id === formData.license)?.icon || ''} This project is licensed under the ${
-      licenses.find(l => l.id === formData.license)?.name || ''
-    }.
+${licenses.find(l => l.id === formData.license)?.icon || ''} This project is licensed under the ${licenses.find(l => l.id === formData.license)?.name || ''
+      }.
 
 ## Getting Started
-${
-  formData.sections.includes('installation')
-    ? '### Installation\n```bash\n' +
-      (formData.packageManager === 'npm' ? 'npm install' : 'yarn install') +
-      '\n```'
-    : ''
-}
+${formData.sections.includes('installation')
+        ? '### Installation\n```bash\n' +
+        (formData.packageManager === 'npm' ? 'npm install' : 'yarn install') +
+        '\n```'
+        : ''
+      }
 
-${
-  formData.sections.includes('usage')
-    ? '\n### Usage\nInstructions for using the project will go here.'
-    : ''
-}
+${formData.sections.includes('usage')
+        ? '\n### Usage\nInstructions for using the project will go here.'
+        : ''
+      }
 
-${
-  formData.sections.includes('contributing')
-    ? '\n### Contributing\nGuidelines for contributing to the project.'
-    : ''
-}
+${formData.sections.includes('contributing')
+        ? '\n### Contributing\nGuidelines for contributing to the project.'
+        : ''
+      }
 
-${
-  formData.sections.includes('testing')
-    ? '\n### Testing\nInstructions for running tests.'
-    : ''
-}
+${formData.sections.includes('testing')
+        ? '\n### Testing\nInstructions for running tests.'
+        : ''
+      }
 
-${
-  formData.sections.includes('dependencies')
-    ? '\n### Dependencies\nList of project dependencies.'
-    : ''
-}`;
+${formData.sections.includes('dependencies')
+        ? '\n### Dependencies\nList of project dependencies.'
+        : ''
+      }`;
 
     setPreviewMarkdown(preview);
   };
 
   const saveToDb = async () => {
     try {
+      if (!previewMarkdown) {
+        await generatePreview();
+       }
       const response = await fetch('/api/documents', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -252,9 +249,7 @@ ${
     if (!validateStep()) return;
 
     if (currentStep === 3) {
-      if (!previewMarkdown) {
-        generatePreview();
-      }
+
       const docId = await saveToDb();
       if (docId) {
         router.push(`/editor/${docId}`);
@@ -356,11 +351,10 @@ ${
                       handleLanguageToggle(lang.id);
                       setSearchQuery('');
                     }}
-                    className={`p-4 rounded-lg border transition-all group ${
-                      formData.languages.includes(lang.id)
+                    className={`p-4 rounded-lg border transition-all group ${formData.languages.includes(lang.id)
                         ? 'border-primary bg-primary/10'
                         : `border-input hover:border-primary/50 ${lang.color}`
-                    }`}
+                      }`}
                   >
                     <div className="font-medium text-center">{lang.name}</div>
                   </button>
@@ -417,11 +411,10 @@ ${
                     onClick={() =>
                       setFormData(prev => ({ ...prev, license: license.id }))
                     }
-                    className={`p-4 rounded-lg border transition-all text-left ${
-                      formData.license === license.id
+                    className={`p-4 rounded-lg border transition-all text-left ${formData.license === license.id
                         ? 'border-primary bg-primary/10'
                         : 'border-input hover:border-primary/50'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-2xl">{license.icon}</span>
@@ -491,9 +484,8 @@ ${
             {[1, 2, 3].map(step => (
               <div
                 key={step}
-                className={`w-3 h-3 rounded-full ${
-                  currentStep >= step ? 'bg-primary' : 'bg-primary/20'
-                }`}
+                className={`w-3 h-3 rounded-full ${currentStep >= step ? 'bg-primary' : 'bg-primary/20'
+                  }`}
               />
             ))}
           </div>

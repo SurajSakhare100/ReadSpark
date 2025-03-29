@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+import { Moon } from 'lucide-react';
+import mongoose, { Mongoose } from 'mongoose';
 
 const documentSchema = new mongoose.Schema({
   
@@ -33,7 +34,6 @@ const documentSchema = new mongoose.Schema({
     enum: ['npm', 'yarn'],
     default: 'npm',
   },
-  // New fields for GitHub integration:
   integrationType: {
     type: String,
     enum: ['github', 'readme'],
@@ -41,11 +41,12 @@ const documentSchema = new mongoose.Schema({
   },
   githubRepo: {
     type: String,
-    default: '', // Repository name when integrationType is 'github'
+    default: '', 
   },
-  username: {
+  userId: {
     type: String,
-    default: '', // GitHub owner username when integrationType is 'github'
+    required: true,
+    default: '', 
   },
 }, { timestamps: true });
 
