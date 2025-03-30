@@ -8,10 +8,10 @@ import User from '@/models/User';
 // GET method to fetch a document by ID
 export async function GET(
   req: NextRequest,
-  params : { params: { id: string } }
+  {params} : { params: { id: string } }
 ) {
   try {
-    const id = await params.id;
+    const id = params.id;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -40,7 +40,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } =await params;
+    const id = params.id;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -96,7 +96,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } =await params;
+    const id = params.id;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
