@@ -206,7 +206,12 @@ export default function EditorPage({ params }: EditorPageProps) {
       const repo = documentData.githubRepo;
       
       // Get current README SHA dynamically
-      const readmeResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/README.md`);
+      const readmeResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/README.md`,{
+        headers: {
+          Authorization: `Bearer ${session?.user?.accessToken}`, // ✅ Include token for private repo access
+          Accept: 'application/vnd.github.v3+json',
+        },
+      });
       const readmeData = await readmeResponse.json();
       
       const response = await fetch('/api/github/push', {

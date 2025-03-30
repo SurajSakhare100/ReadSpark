@@ -109,7 +109,7 @@ export default function DashboardPage() {
       setError(null);
 
       const existingDoc = documents.find(doc => 
-        doc.githubRepo === `${owner}/${repo}`
+        doc.githubRepo === `${repo}`
       );
 
       if (existingDoc) {
@@ -290,6 +290,7 @@ export default function DashboardPage() {
                           <div>
                             <h3 className="font-medium ">{doc.title}</h3>
                             <p className="text-sm text-gray-500 line-clamp-1 ">{doc.description}</p>
+                            
                             <div className="flex items-center space-x-4 mt-2">
                               <div className="flex items-center text-sm text-gray-500">
                                 <Calendar className="h-4 w-4 mr-1" />

@@ -15,6 +15,7 @@ interface DocumentBody {
   sections: string[];
   content: string;
   githubRepo?: string;
+  integrationType: string;
 }
 // POST: Create a new document
 export async function POST(req: Request) {
@@ -27,8 +28,8 @@ export async function POST(req: Request) {
 
     const body: DocumentBody = await req.json();
 
-    // Validate required fields
-    const { title, description, languages, license, sections, content } = body;
+      
+      const { title, description, languages, license, sections, content,integrationType } = body;
     if (!title || !languages || !content) {
       return NextResponse.json(
         { error: 'Missing required fields: title, languages, or content' },
@@ -47,6 +48,7 @@ export async function POST(req: Request) {
       license,
       sections,
       content,
+      integrationType,
       githubRepo: body.githubRepo || null,
       createdAt: new Date(),
       updatedAt: new Date(),
