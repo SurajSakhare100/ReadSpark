@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { 
@@ -26,7 +26,7 @@ import { Button } from '@/components/ui/button';
 import DashboardNav from '@/components/DashboardNav';
 import SettingsPage from '@/components/Settings';
 import Image from 'next/image';
-import toast from 'react-hot-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface Document {
   _id: string;
@@ -49,7 +49,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-
+const {toast}=useToast();
   const [projectStats, setProjectStats] = useState({
     total: 0,
     completed: 0,
@@ -123,13 +123,21 @@ export default function DashboardPage() {
       );
       if(projectCount > 5 && !existingDoc) {
         // setError('Project limit reached. Please delete an existing project to import a new one.');    
-        toast.error('Project limit reached. Please delete an existing project to import a new one.');
+        toast({
+          title: 'Error',
+          description: 'Project limit reached. Please delete an existing project to import a new one.',
+          variant: 'destructive',
+        });
         setLoading(false);  
       }
 
       if (existingDoc) {
         // setError('Repository already imported');
-        toast.error('Repository already imported');
+        toast({
+          title: 'Error',
+          description: 'Repository already imported',
+          variant: 'destructive',
+        });
         setLoading(false);
         return;
       }
