@@ -129,6 +129,7 @@ const {toast}=useToast();
           variant: 'destructive',
         });
         setLoading(false);  
+        return;
       }
 
       if (existingDoc) {
