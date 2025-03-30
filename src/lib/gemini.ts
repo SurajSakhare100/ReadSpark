@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string);
+const genAI = new GoogleGenerativeAI(process.env.NEXT_GOOGLE_API_KEY as string);
 
 export interface MarkdownPrompt {
   title: string;
