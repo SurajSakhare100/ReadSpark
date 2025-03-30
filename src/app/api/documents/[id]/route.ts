@@ -40,10 +40,10 @@ export async function GET(
 // PUT method to update a document by ID
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  {params} : { params: tParams })
+ {
   try {
-    const id = params.id;
+    const {id} = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -96,10 +96,10 @@ export async function PUT(
 // DELETE method to delete a document by ID
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  {params} : { params: tParams })
+ {
   try {
-    const id = params.id;
+    const {id} = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
