@@ -26,6 +26,7 @@ import { Button } from '@/components/ui/button';
 import DashboardNav from '@/components/DashboardNav';
 import SettingsPage from '@/components/Settings';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 
 interface Document {
   _id: string;
@@ -109,11 +110,18 @@ export default function DashboardPage() {
       setError(null);
 
       const existingDoc = documents.find(doc => 
-        doc.githubRepo === `${repo}`
+        doc.githubRepo === `${owner}/${repo}`
       );
+      if((session?.user?.projectCount ?? 0) > 5 && !existingDoc) {
+        setError('Project limit reached. Please delete an existing project to import a new one.');    
+        toast.error('Project limit reached. Please delete an existing project to import a new one.');
+        setLoading(false);  
+      }
 
       if (existingDoc) {
         setError('Repository already imported');
+        toast.error('Repository already imported');
+        setLoading(false);
         return;
       }
 

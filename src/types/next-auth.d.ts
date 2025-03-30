@@ -8,6 +8,7 @@ declare module 'next-auth' {
       name?: string | null;
       image?: string | null;
       accessToken: string;
+      projectCount?: number; // Optional field for project count
     };
   }
 
@@ -17,6 +18,7 @@ declare module 'next-auth' {
     accessToken: string;
     name?: string | null;
     image?: string | null;
+    projectCount?: number; // Optional field for project count
   }
   interface Profile {
     id: string;
