@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import connectDB from '@/lib/db';
 import User, { createOrUpdateUser } from '@/models/User'; // Import the helper function
+import Document from '@/models/Document';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -56,6 +57,13 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.username = (user as { username: string }).username;
       }
+      try {
+        const projectCount = await Document.countDocuments({ userId: token.id });
+        token.projectCount = projectCount;
+      } catch (error) {
+        console.error('Error fetching project count:', error);
+        token.projectCount = 0;
+      }
       return token;
     },
     async session({ session, token }) {
@@ -63,6 +71,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string;
         session.user.username = token.username as string;
         session.user.accessToken = token.accessToken as string;
+        session.user.projectCount = token.projectCount as number;
       }
       return session;
     },

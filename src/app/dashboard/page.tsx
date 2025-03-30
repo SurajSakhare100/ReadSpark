@@ -110,7 +110,7 @@ export default function DashboardPage() {
       setError(null);
 
       const existingDoc = documents.find(doc => 
-        doc.githubRepo === `${owner}/${repo}`
+        doc.githubRepo === `${repo}`
       );
       if((session?.user?.projectCount ?? 0) > 5 && !existingDoc) {
         // setError('Project limit reached. Please delete an existing project to import a new one.');    
