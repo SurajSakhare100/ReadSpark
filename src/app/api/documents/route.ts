@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     }
 
     const body: DocumentBody = await req.json();
-    if((session?.user?.projectCount ?? 0) >= 5){    
+    if((session?.user?.projectCount ?? 0) > 5){    
       return NextResponse.json({ error: 'Project limit reached' }, { status: 403 });
     }
 

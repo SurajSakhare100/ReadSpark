@@ -112,7 +112,6 @@ const {toast}=useToast();
         .catch((err) => console.error('Error fetching project count:', err));
     }
   }, [session?.user.id]);
-
   const handleSelectProject = async (owner: string, repo: string, repoDetails: any) => {
     try {
       setLoading(true);
@@ -121,7 +120,7 @@ const {toast}=useToast();
       const existingDoc = documents.find(doc => 
         doc.githubRepo === `${repo}`
       );
-      if(projectCount > 5 && !existingDoc) {
+      if(projectCount > 5) {
         // setError('Project limit reached. Please delete an existing project to import a new one.');    
         toast({
           title: 'Error',
