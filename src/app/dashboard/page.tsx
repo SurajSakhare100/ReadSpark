@@ -184,7 +184,7 @@ export default function DashboardPage() {
           <Link href="/"
                 className={`w-full flex items-center space-x-1 px-3 rounded-lg cursor-pointer mb-6`}
               >
-                        <Image src={require('../../../public/logo.png')} alt="Logo" width={40} height={40} />  
+                        <Image src={require('../../public/logo.png')} alt="Logo" width={40} height={40} />  
 
                 <span>ReadSpark</span>
               </Link>
