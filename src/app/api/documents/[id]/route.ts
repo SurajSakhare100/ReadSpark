@@ -6,33 +6,33 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/config';
 import User from '@/models/User';
 
 // GET method to fetch a document by ID
-// export async function GET(
-//   req: NextRequest,
-//   context : { params: { id: string } }
-// ) {
-//   try {
-//     const id = context.params.id;
-//     const session = await getServerSession(authOptions);
+export async function GET(
+  req: NextRequest,
+  params : { params: { id: string } }
+) {
+  try {
+    const id = await params.id;
+    const session = await getServerSession(authOptions);
 
-//     if (!session?.user) {
-//       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-//     }
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-//     await connectDB();
-//     const userId = session.user.id;
+    await connectDB();
+    const userId = session.user.id;
 
-//     const document = await Document.findOne({ _id: id, userId });
+    const document = await Document.findOne({ _id: id, userId });
 
-//     if (!document) {
-//       return NextResponse.json({ error: 'Document not found' }, { status: 404 });
-//     }
+    if (!document) {
+      return NextResponse.json({ error: 'Document not found' }, { status: 404 });
+    }
 
-//     return NextResponse.json(document, { status: 200 });
-//   } catch (error: any) {
-//     console.error('Error fetching document:', error.message || error);
-//     return NextResponse.json({ error: 'Failed to fetch document' }, { status: 500 });
-//   }
-// }
+    return NextResponse.json(document, { status: 200 });
+  } catch (error: any) {
+    console.error('Error fetching document:', error.message || error);
+    return NextResponse.json({ error: 'Failed to fetch document' }, { status: 500 });
+  }
+}
 
 // PUT method to update a document by ID
 export async function PUT(
@@ -40,7 +40,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
+    const { id } =await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -96,7 +96,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
+    const { id } =await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
