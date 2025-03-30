@@ -5,13 +5,16 @@ import Document from '@/models/Document';
 import { authOptions } from '@/app/api/auth/[...nextauth]/config';
 import User from '@/models/User';
 
+
+type tParams = Promise<{ id: string }>;
+
 // GET method to fetch a document by ID
 export async function GET(
   req: NextRequest,
-  params : { params: { id: string } }
-) {
+  {params} : { params: tParams })
+ {
   try {
-    const id = params.params.id;
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
