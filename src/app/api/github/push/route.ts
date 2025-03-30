@@ -47,7 +47,7 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           message: 'Update README.md via ReadSpark',
           content: encodeToBase64(content),
-          sha,
+          sha:sha,
         }),
       }
     );

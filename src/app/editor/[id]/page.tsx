@@ -196,7 +196,7 @@ export default function EditorPage({ params }: EditorPageProps) {
   };
 
   const handlePushToGithub = async () => {
-    if (!documentData?.githubRepo ) return;
+    if (!documentData?.githubRepo && documentData.integrationType!='github' ) return;
     
     try {
       setIsPushing(true);
