@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     }
 
     // Check project count limit
-    if (user.projectCount > 5) {
+    if (user.projectCount >= 5) {
       return NextResponse.json({ error: 'Project limit reached (max 5)' }, { status: 403 });
     }
       

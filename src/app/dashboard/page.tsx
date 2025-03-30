@@ -120,7 +120,7 @@ const {toast}=useToast();
       const existingDoc = documents.find(doc => 
         doc.githubRepo === `${repo}`
       );
-      if(projectCount > 5) {
+      if(projectCount >= 5) {
         // setError('Project limit reached. Please delete an existing project to import a new one.');    
         toast({
           title: 'Error',

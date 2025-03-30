@@ -142,7 +142,7 @@ export default function CreateProject() {
     }));
   };
 
-  const generatePreview = () => {
+  const generatePreview = (): string => {
     const preview = `# ${formData.title}
 
 ${formData.description || ''}
@@ -188,19 +188,22 @@ ${formData.sections.includes('dependencies')
       }`;
 
     setPreviewMarkdown(preview);
+    return preview;
   };
 
   const saveToDb = async () => {
     try {
-      if (!previewMarkdown) {
-        await generatePreview();
-       }
+      let content = previewMarkdown;
+
+      if (!content) {
+        content = await generatePreview(); // Ensure preview is generated and use the returned value
+      }
       const response = await fetch('/api/documents', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          content: previewMarkdown,
+          content,
         }),
       });
 
