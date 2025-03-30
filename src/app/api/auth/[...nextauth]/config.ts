@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
           scope: 'read:user user:email repo write:repo_hook', // Read/Write Permissions
         },
       },
-      profile(profile, tokens) {
+      profile(profile, tokens: any) {
         return {
           id: profile.id.toString(),
           name: profile.name || profile.login,
@@ -37,9 +37,9 @@ export const authOptions: NextAuthOptions = {
         // Use the helper function to create or update the user.
         await createOrUpdateUser({
           userId: profile?.id.toString() || '',
-          username: profile?.login || '',
+          username: (profile as { login?: string })?.login || '',
           accessToken: account?.access_token || '',
-          image: profile?.avatar_url || '',
+          image: (profile as { avatar_url?: string }).avatar_url || '',
         });
 
         return true;
