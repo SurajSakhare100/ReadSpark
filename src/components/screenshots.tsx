@@ -12,7 +12,7 @@ export function Screenshots() {
         </p>
 
         <div className="relative rounded-xl overflow-hidden border bg-card shadow-2xl  aspect-video">
-          <video preload="none" className='w-full h-full object-cover' autoPlay loop muted playsInline> 
+          <video preload="auto" className='w-full h-full object-cover' autoPlay loop muted playsInline> 
             <source src="/readspark.mp4" type="video/mp4" />
             <track
               src="/path/to/captions.vtt "

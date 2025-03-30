@@ -11,7 +11,7 @@ export const metadata = {
   title: 'ReadSpark - AI-Powered Github Documentation Generator',
   description: 'Generate beautiful documentation with AI',
   icons: {
-    icon: '/favicon.ico',
+    icon: '/logo.png',
   }
 };
 

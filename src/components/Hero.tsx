@@ -27,16 +27,16 @@ export default function Hero() {
           <span className="text-blue-600 dark:text-blue-500">not the ReadMe</span>
         </h1>
         
-        <p className="mt-6 text-2xl text-center text-muted-foreground max-w-5xl animate-fade-in-delay">
-          Effortlessly craft stunning READMEs with our built-in templates
+        <p className="my-4 text-2xl text-center text-muted-foreground max-w-5xl animate-fade-in-delay">
+        Effortlessly Craft and Manage README Files with ReadSpark!
         </p>
 
         <Button 
           asChild
           size="xl"
-          className="mt-8  py-3 animate-fade-in-delay-2 bg-blue-600 dark:text-white text-lg"
+          className="mt-2  py-3 animate-fade-in-delay-2 bg-blue-600 dark:text-white text-lg"
         >
-          <Link href="/dashboard">
+          <Link href="/create">
             Start Editing Your README.md now
             <ArrowRight className="w-8 h-8 ml-2 text-2xl" />
           </Link>
