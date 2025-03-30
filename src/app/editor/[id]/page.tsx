@@ -51,6 +51,35 @@ export default function EditorPage({ params }: EditorPageProps) {
       fetchDocument();
     }
   }, [id]);
+ const fetchGenerateMarkdown = async (projectData: {
+    title: string;
+    description?: string;
+    languages: string[];
+    license?: string;
+    sections: string[];
+    currentContent?: string;
+  }) => {
+    try {
+      const response = await fetch("/api/documents/gemini", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(projectData),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to generate markdown");
+      }
+  
+      const data = await response.json();
+      return data.content;
+    } catch (error: any) {
+      console.error("Error fetching markdown:", error);
+      throw new Error(error.message || "Failed to generate markdown");
+    }
+  };
+  
 
   const handleRegenerate = async () => {
     try {
@@ -65,9 +94,9 @@ export default function EditorPage({ params }: EditorPageProps) {
         sections: documentData.sections,
         currentContent: editableContent,
       };
-
-      const content = await generateMarkdown(projectData);
-      setEditableContent(content);
+      // Call API
+    const content = await fetchGenerateMarkdown(projectData);
+    setEditableContent(content);
 
       // Save the regenerated content
       const response = await fetch(`/api/documents/${id}`, {
