@@ -3,7 +3,6 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Loader2, Save, Wand2, Github, MoveLeft, ArrowLeft } from 'lucide-react';
 import MarkdownPreview from '@/components/MarkdownPreview';
-import { generateMarkdown } from '@/lib/gemini';
 import { toast } from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
