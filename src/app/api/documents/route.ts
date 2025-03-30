@@ -27,6 +27,8 @@ export async function POST(req: Request) {
     }
 
     const body: DocumentBody = await req.json();
+    await connectDB();
+
     const userId = session.user.id;
     const user = await User.findOne({ userId: userId });
     if (!user) {
@@ -46,7 +48,6 @@ export async function POST(req: Request) {
       );
     }
 
-    await connectDB();
     // Create a new document
     const document = await Document.create({
       userId: userId,
