@@ -27,10 +27,16 @@ export async function POST(req: Request) {
     }
 
     const body: DocumentBody = await req.json();
-    if((session?.user?.projectCount ?? 0) > 5){    
-      return NextResponse.json({ error: 'Project limit reached' }, { status: 403 });
+    const userId = session.user.id;
+    const user = await User.findOne({ userId: userId });
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Check project count limit
+    if (user.projectCount > 5) {
+      return NextResponse.json({ error: 'Project limit reached (max 5)' }, { status: 403 });
+    }
       
       const { title, description, languages, license, sections, content,integrationType } = body;
     if (!title || !languages || !content) {
@@ -41,7 +47,6 @@ export async function POST(req: Request) {
     }
 
     await connectDB();
-    const userId = session.user.id;
     // Create a new document
     const document = await Document.create({
       userId: userId,
@@ -58,7 +63,7 @@ export async function POST(req: Request) {
     });
 
     // Increment the user's project count
-    const user=await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { userId: userId},
       { $inc: { projectCount: 1 } }, 
       { new: true } 
