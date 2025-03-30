@@ -117,7 +117,7 @@ export async function DELETE(
 
     await Document.deleteOne({ _id: id });
     await User.findOneAndUpdate(
-      { _id: userId },
+      { userId: userId },
       { $inc: { projectCount: -1 } },
       { new: true }
     );
