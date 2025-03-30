@@ -9,11 +9,17 @@
   box-sizing: border-box;
 }
 html, body {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
 }
+
+.container{
+  width: 80%;
+}
+
 body {
-  max-width: 100%;;
+  max-width: 100%;
+  overflow-x: hidden;
   overflow-x: hidden;
 }
 
@@ -72,11 +78,7 @@ body {
     @apply border-border;
   }
   
-  body {
-    @apply bg-background text-foreground;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+  
  
 }
 
@@ -100,24 +102,4 @@ body {
 /* Smooth transitions */
 .transition-all {
   transition-duration: 200ms;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: hsl(var(--secondary));
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground));
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary));
 }
