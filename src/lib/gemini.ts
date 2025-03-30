@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const genAI = new GoogleGenerativeAI(process.env.NEXT_GOOGLE_API_KEY as string);
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY as string);
 
 export interface MarkdownPrompt {
   title: string;
@@ -46,7 +46,6 @@ The documentation should be professional and well-structured return in plain tex
     const result = await model.generateContent(promptText);
     const response = await result.response;
     const generatedText = await response.text();
-    console.log(generatedText);
 
     if (!generatedText) throw new Error('No content generated');
 
