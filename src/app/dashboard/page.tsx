@@ -113,13 +113,13 @@ export default function DashboardPage() {
         doc.githubRepo === `${owner}/${repo}`
       );
       if((session?.user?.projectCount ?? 0) > 5 && !existingDoc) {
-        setError('Project limit reached. Please delete an existing project to import a new one.');    
+        // setError('Project limit reached. Please delete an existing project to import a new one.');    
         toast.error('Project limit reached. Please delete an existing project to import a new one.');
         setLoading(false);  
       }
 
       if (existingDoc) {
-        setError('Repository already imported');
+        // setError('Repository already imported');
         toast.error('Repository already imported');
         setLoading(false);
         return;
