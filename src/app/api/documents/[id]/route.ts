@@ -8,10 +8,10 @@ import User from '@/models/User';
 // GET method to fetch a document by ID
 export async function GET(
   req: NextRequest,
-  {params} : { params: { id: string } }
+  params : { params: { id: string } }
 ) {
   try {
-    const id = params.id;
+    const id = params.params.id;
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
