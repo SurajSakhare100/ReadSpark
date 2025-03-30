@@ -1,7 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY as string);
-
 export interface MarkdownPrompt {
   title: string;
   description?: string;
@@ -42,6 +40,8 @@ The documentation should be professional and well-structured return in plain tex
 `;
 
   try {
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY as string);
+    if (!genAI) throw new Error('Failed to initialize Google Generative AI');
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
     const result = await model.generateContent(promptText);
     const response = await result.response;
