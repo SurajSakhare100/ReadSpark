@@ -9,6 +9,7 @@ export async function middleware(request: Request) {
 
   // Allow access to public routes and static files
   if (
+    pathname === '/' || 
     pathname.startsWith('/auth/signin') || // Allow sign-in page
     pathname.startsWith('/api/auth') || // Allow NextAuth API routes
     pathname.startsWith('/_next') || // Allow Next.js static files

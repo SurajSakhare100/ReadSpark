@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+body {
+  max-width: 100%;;
+  overflow-x: hidden;
+}
+
 @layer base {
   :root {
     --background: 240 10% 98%; /* Slightly grayer background */
@@ -59,7 +74,10 @@
   
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+ 
 }
 
 /* Custom animations */

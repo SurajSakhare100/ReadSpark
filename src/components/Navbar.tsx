@@ -11,6 +11,7 @@ import {
 } from './ui/dropdown-menu';
 import { ThemeToggle } from './theme-toggle';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function Navbar() {
   const { data: session } = useSession(); // Get session data
@@ -21,7 +22,7 @@ export default function Navbar() {
         {/* Logo and Brand */}
         <Link href="/" className="flex items-center space-x-2">
           <div className="w-8 h-8">
-            <FileText className="w-full h-full text-primary" />
+           <Image src={require("../../public/logo.png")} alt="Logo" width={40} height={40} className="w-full h-full" />
           </div>
           <span className="text-xl font-semibold">ReadSpark</span>
         </Link>
@@ -53,7 +54,6 @@ export default function Navbar() {
             </>
           ) : (
             <Button
-              variant="outline"
               size="sm"
               onClick={() => signIn('github')}
             >
