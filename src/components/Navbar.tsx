@@ -22,7 +22,7 @@ export default function Navbar() {
         {/* Logo and Brand */}
         <Link href="/" className="flex items-center space-x-2">
           <div className="w-8 h-8">
-           <Image src={require("../public/logo.png")} alt="Logo" width={40} height={40} className="w-full h-full" />
+           <Image src={require("../../public/logo.png")} alt="Logo" width={40} height={40} className="w-full h-full" />
           </div>
           <span className="text-xl font-semibold">ReadSpark</span>
         </Link>

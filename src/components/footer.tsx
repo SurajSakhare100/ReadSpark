@@ -34,10 +34,10 @@ export function Footer() {
           <div className="space-y-4">
             <h4 className="font-semibold">Connect</h4>
             <div className="flex space-x-4">
-              <Link href="https://github.com/readspark" className="text-muted-foreground hover:text-primary">
+              <Link href="https://github.com/SurajSakhare100" className="text-muted-foreground hover:text-primary">
                 <Github className="h-6 w-6" />
               </Link>
-              <Link href="https://twitter.com/readspark" className="text-muted-foreground hover:text-primary">
+              <Link href="https://x.com/surajsakhare100" className="text-muted-foreground hover:text-primary">
                 <Twitter className="h-6 w-6" />
               </Link>
             </div>
