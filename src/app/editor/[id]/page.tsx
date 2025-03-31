@@ -302,17 +302,19 @@ export default function EditorPage({ params }: EditorPageProps) {
               Download
             </button>
             <button
-              onClick={handleRegenerate}
-              disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors disabled:opacity-50"
-            >
-              {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Wand2 className="h-4 w-4" />
-              )}
-              Regenerate
-            </button>
+  onClick={handleRegenerate}
+  disabled={loading}
+  className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors disabled:opacity-50 relative overflow-hidden
+    before:absolute before:inset-0 before:bg-primary/30 before:blur-xl before:opacity-0 hover:before:opacity-100 before:transition-opacity"
+>
+  {loading ? (
+    <Loader2 className="h-4 w-4 animate-spin" />
+  ) : (
+    <Wand2 className="h-4 w-4" />
+  )}
+  Regenerate
+</button>
+
             <button
               onClick={handleSave}
               disabled={loading}

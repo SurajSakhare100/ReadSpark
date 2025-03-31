@@ -4,7 +4,6 @@ import connectDB from '@/lib/db';
 import Document from '@/models/Document';
 import User from '@/models/User';
 import { authOptions } from '@/app/api/auth/[...nextauth]/config';
-import mongoose from 'mongoose';
 
 // Define TypeScript types for body content
 interface DocumentBody {
