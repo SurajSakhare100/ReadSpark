@@ -1,0 +1,22 @@
+{
+    "name": "ReadSpark",
+    "short_name": "ReadSpark",
+    "description": "AI-powered GitHub documentation generator to create high-quality READMEs effortlessly.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2563eb",
+    "icons": [
+      {
+        "src": "/logo.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/logo.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

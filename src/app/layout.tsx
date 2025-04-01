@@ -4,12 +4,12 @@ import AuthProvider from '@/components/providers/AuthProvider';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Analytics } from '@vercel/analytics/next';
- 
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'ReadSpark - AI-Powered Github Documentation Generator',
+  title: 'ReadSpark - AI-Powered GitHub Documentation Generator',
   description: 'Generate beautiful documentation with AI',
   icons: {
     icon: '/logo.png',
@@ -23,11 +23,35 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-       <head>
-        {/* Viewport Meta Tag */}
+      <Head>
+        {/* Basic SEO */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </head>
-      <body >
+        <meta name="description" content="Generate beautiful GitHub documentation effortlessly with AI-powered ReadSpark." />
+        <meta name="keywords" content="GitHub README generator, AI documentation, Markdown editor, Readme builder, Documentation tool" />
+        <meta name="author" content="ReadSpark Team" />
+        <link rel="canonical" href="https://readspark.vercel.app/" />
+
+        {/* Open Graph (OG) - Social Media Sharing */}
+        <meta property="og:title" content="ReadSpark - AI-Powered GitHub Documentation Generator" />
+        <meta property="og:description" content="Create high-quality README files effortlessly with AI-powered ReadSpark." />
+        <meta property="og:image" content="https://readspark.vercel.app/favicon.ico" />
+        <meta property="og:url" content="https://readspark.vercel.app/" />
+        <meta property="og:type" content="website" />
+
+        {/* Twitter Card - Better Previews on Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="ReadSpark - AI-Powered GitHub Documentation Generator" />
+        <meta name="twitter:description" content="Create high-quality README files effortlessly with AI-powered ReadSpark." />
+        <meta name="twitter:image" content="https://readspark.vercel.app/favicon.ico" />
+
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/manifest.json" />
+      </Head>
+
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

@@ -22,6 +22,10 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative">
+   
+      <div className='flex items-center justify-center'>
+      <Link href="https://www.producthunt.com/posts/readspark-2?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-readspark&#0045;2" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=948195&theme=light&t=1743488054126" alt="ReadSpark - &#0032;Focus&#0032;on&#0032;your&#0032;Projects&#0044;&#0032;not&#0032;the&#0032;ReadMe | Product Hunt"  className='w-64'/></Link>
+      </div>
         <h1 className="text-5xl md:text-8xl font-bold tracking-tight text-foreground max-w-5xl animate-fade-in">
           Focus on your Projects,{' '}
           <span className="text-blue-600 dark:text-blue-500">not the ReadMe</span>
