@@ -5,6 +5,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Analytics } from '@vercel/analytics/next';
 import Head from 'next/head';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -49,6 +50,16 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/manifest.json" />
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-MJXHR9BRJ6"></Script>
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-MJXHR9BRJ6');
+        `}
+        </Script>
       </Head>
 
       <body>
